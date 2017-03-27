@@ -14,19 +14,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * Controller on /projects call
+ * @author hledall
+ *
+ */
 @RestController
 public class Projects {
 	@Autowired
 	ProjectRepoImplMongo prim;
-
-	/*
-	 * @RequestMapping(value = "/projects", method = RequestMethod.GET) public
-	 * void returnProjects() { System.out.println("/projects"); }
+	/**
+	 * try to add a project when POST on /projects
+	 * if request is ok return 201 + Project Json
+	 * if not ok return 400
+	 * @param title
+	 * @return
 	 */
 	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String returnProjects(@RequestParam(value = "title", required = false) String title) {
+	public String saveProjects(@RequestParam(value = "title", required = false) String title) {
 
 		System.out.println("/projects");
 		if (title != null && checkTitleNotExisting(title)) {
@@ -38,7 +44,11 @@ public class Projects {
 		throw new EmptyResultDataAccessException(0);
 		
 	}
-
+	/**
+	 * check if the title is already existing in the base
+	 * @param title
+	 * @return
+	 */
 	public boolean checkTitleNotExisting(String title) {
 		Project p = prim.getObjectByTitle(title);
 		if(p == null){
@@ -46,7 +56,11 @@ public class Projects {
 		}
 		return false;
 	}
-
+	/**
+	 * to return 400 on error
+	 * @param e
+	 * @throws IOException
+	 */
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void handleEmptyResult(Exception e) throws IOException {

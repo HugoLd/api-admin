@@ -1,10 +1,6 @@
 package org.cap.repo;
 
-import java.util.List;
 
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-
-import com.mongodb.WriteResult;
 
 /**
  * Interface to implements for basic Database operations
@@ -13,18 +9,30 @@ import com.mongodb.WriteResult;
  * @param <T>
  */
 public interface Repo<T>{
+	/**
+	 * get all the <T> objects
+	 * @param object
+	 */
 	//public List<T> getAllObjects();
-
+	/**
+	 * insert a <T> object in the db
+	 * @param object
+	 */
 	public void saveObject(T object);
-
+	/**
+	 * get a <T> object in the db by id
+	 */
 	//public T getObject(String id);
-
-	//public WriteResult updateObject(String id, String name);
-
+	/**
+	 * update a <T> object in the db
+	 * NEXT SPRINT
+	 */
+	//public WriteResult updateObject(<T> object);
+	/**
+	 * delete an object in the db
+	 * NEXT SPRINT
+	 */
 	//public void deleteObject(String id);
 
-	//public void createCollection();
-
-	//public void dropCollection();
 
 }
