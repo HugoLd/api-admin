@@ -1,0 +1,3 @@
+org\cap\controller\Projects.class
+org\cap\bean\Project.class
+org\cap\repo\ProjectRepo.class
