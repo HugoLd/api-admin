@@ -1,5 +1,7 @@
 package org.cap.repo;
 
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 
 import org.cap.bean.Project;
@@ -60,6 +62,17 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	public Project getObjectByTitle(String title) {
 
 		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class, "projects");
+		
+	}
+	
+	/**
+	 * return the first project to match the given UUID
+	 * @param title
+	 * @return
+	 */
+	public Project getObjectByID(UUID id) {
+
+		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
 		
 	}
 
