@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Projects {
 	@Autowired
-	ProjectRepoImplMongo prim;
+	protected ProjectRepoImplMongo prim;
 	/**
 	 * try to add a project when POST on /projects
 	 * if request is ok return 201 + Project Json
@@ -49,7 +49,7 @@ public class Projects {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public String addEmail(@RequestParam(value = "email", required = false) String email,@PathVariable("uiid") String uuid) {
 
-		if (email != null && checkTitleNotInProject(email) && IsAnEmail(email) ) {
+		if (email != null && checkEmailNotInProject(email) && IsAnEmail(email) ) {
 			
 			Project p = prim.getObjectByID(UUID.fromString(id));
 			
@@ -59,14 +59,14 @@ public class Projects {
 		
 	}
 	*/
-	private boolean IsAnEmail(String email) {
-		if(email.split("#").length == 2 && email.length()>6 && email.length() < 20){
+	protected boolean IsAnEmail(String email) {
+		if(email.split("@").length == 2 && email.length()>6 && email.length() < 30 && email.contains(".")){
 			return true;
 		}
 		return false;
 	}
 
-	private boolean checkTitleNotInProject(String email) {
+	protected boolean checkEmailNotInProject(String email) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -76,7 +76,7 @@ public class Projects {
 	 * @param title
 	 * @return
 	 */
-	public boolean checkTitleNotExisting(String title) {
+	protected boolean checkTitleNotExisting(String title) {
 		Project p = prim.getObjectByTitle(title);
 		if(p == null){
 			return true;
@@ -88,8 +88,9 @@ public class Projects {
 	 * @param e
 	 * @throws IOException
 	 */
+	/*
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void handleEmptyResult(Exception e) throws IOException {
-	}
+	}*/
 }
