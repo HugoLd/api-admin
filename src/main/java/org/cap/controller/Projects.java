@@ -44,12 +44,12 @@ public class Projects {
 		throw new EmptyResultDataAccessException(0);
 		
 	}
-	
+	/*
 	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public String addEmail(@RequestParam(value = "email", required = false) String email,@PathVariable("id") String id) {
+	public String addEmail(@RequestParam(value = "email", required = false) String email,@PathVariable("uiid") String uuid) {
 
-		if (email != null && checkTitleNotInProject(email) && IsAnEmail(email)) {
+		if (email != null && checkTitleNotInProject(email) && IsAnEmail(email) ) {
 			
 			Project p = prim.getObjectByID(UUID.fromString(id));
 			
@@ -58,6 +58,7 @@ public class Projects {
 		throw new EmptyResultDataAccessException(0);
 		
 	}
+	*/
 	private boolean IsAnEmail(String email) {
 		// TODO Auto-generated method stub
 		return false;
