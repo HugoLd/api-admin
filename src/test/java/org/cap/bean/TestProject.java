@@ -22,30 +22,30 @@ public class TestProject extends TestCase {
 		super.tearDown();
 	}
 	@Test
-	public void testConstructorTitle() {
+	public void testConstructor_shouldBeEqualToTitle_whenCallConstructor() {
 		assertEquals(p.title, title);
 
 	}
 	@Test
-	public void testConstructorUUID() {
+	public void testConstructor_shouldntBeNull_whenCall() {
 		assertTrue(p._id != null);
 	}
 	@Test
-	public void testGetTitle() {
+	public void testGetTitle_shouldBeEqualToTheTitle_whenCall() {
 		assertEquals(p.getTitle(),p.title);
 	}
 	@Test
-	public void testSetTitle() {
+	public void testSetTitle_shouldBeEqualTothe_whenSet() {
 		String tit = "testSetTitle";
 		p.setTitle(tit);
 		assertEquals(p.title, tit);
 	}
 	@Test
-	public void testGetUUID(){
+	public void testGetUUID_shouldBeEqualToTheUUID_WhenCall(){
 		assertEquals(p._id,p.get_id());
 	}
 	@Test
-	public void testSetUUID(){
+	public void testSetUUID_shouldBeEqualToTheUUID_whenSet(){
 		UUID id = UUID.randomUUID();
 		p.set_id(id);
 		assertEquals(id,p._id);

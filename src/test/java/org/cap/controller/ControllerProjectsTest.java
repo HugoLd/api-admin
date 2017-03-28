@@ -1,5 +1,8 @@
 package org.cap.controller;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
 import org.junit.Test;
@@ -16,6 +19,7 @@ import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerProjectsTest extends TestCase {
+	@Mock
 	public Project p;
 	@InjectMocks
 	public Projects ps;
@@ -23,14 +27,14 @@ public class ControllerProjectsTest extends TestCase {
 	ProjectRepoImplMongo prim;
 	public String title;
 
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		super.setUp();
 		String title = Math.random()+"ARP";
 		ps = new Projects();
 		p = new Project(title);
 	}
 	@Test
-	protected void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 		super.tearDown();
 	}
 	@Test
@@ -55,13 +59,31 @@ public class ControllerProjectsTest extends TestCase {
 	}
 	@Test
 	public void testCheckTitleNotExisting_shouldBeFalse_whenAlreadyExist(){
+		when(prim.getObjectByTitle("Gestion")).thenReturn(new Project("Gestion"));
 		assertEquals(ps.checkTitleNotExisting("Gestion"),false);
+		verify(prim).getObjectByTitle("Gestion");
 	}
 	@Test
 	public void testCheckTitleNotExisting_shouldBeTrue_whenEmailNotExisting(){
+		when(prim.getObjectByTitle("I'm not in")).thenReturn(null);
 		assertEquals(ps.checkTitleNotExisting("I'm not in"),true);
+		verify(prim).getObjectByTitle("I'm not in");
 	}
-	
-	
+	@Test
+	public void testSaveProject_shouldBeAProject_whenprojectSaved(){
+		Project proj = ps.saveProjects("hello");
+		assertEquals(proj.getClass(),Project.class);
+		
+	}
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleNull(){
+		ps.saveProjects(null);
+	}
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenAlreadyExist(){
+		when(prim.getObjectByTitle("hello")).thenReturn(new Project("hello"));
+		ps.saveProjects("hello");
+		verify(prim).getObjectByTitle("hello");
+	}
 
 }

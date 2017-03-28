@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  */
 @Document
-public class Project implements ObjectDB {
+public class Project {
 	@Id
 	protected UUID _id;
 	protected String title;
@@ -64,31 +64,6 @@ public class Project implements ObjectDB {
 
 	// </accessors>
 
-	/**
-	 * return the Project on Json format
-	 
-	public String toJson() {
-
-		return "{\"_id\" : \"" + this._id + "\" ,\"title\" : \"" + this.title + "\"}";
-
-	}
-	/**
-	 * return the Project on Json format with the email list
-	 
-	public String toJsonWithMembers() {
-		if (listMail != null) {
-			String json = "{\"_id\" : \"" + this._id + "\" ,\"title\" : \"" + this.title
-					+ "\" \"members\" : [{\"mail\" : \"" + listMail.get(0)+"\"}";
-			for(int i = 1;i<listMail.size();i++){
-				json+= ",{\"mail\" : "+listMail.get(i)+"\"}";
-			}
-			json+="]";
-
-			return json;
-		}
-		return null;
-
-	}
-	*/
+	
 
 }

@@ -88,9 +88,9 @@ public class Projects {
 	 * @param e
 	 * @throws IOException
 	 */
-	/*
+
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void handleEmptyResult(Exception e) throws IOException {
-	}*/
+	}
 }
