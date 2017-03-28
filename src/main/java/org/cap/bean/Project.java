@@ -15,18 +15,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Project implements ObjectDB {
 	@Id
-	private UUID _id;
-	private String title;
-	private ArrayList<String> listMail;
+	protected UUID _id;
+	protected String title;
+	protected ArrayList<String> listMail;
 
 	/**
 	 * Constructor generating UUID
 	 * 
 	 * @param title
 	 */
-	@SuppressWarnings("static-access")
 	public Project(String title) {
-		this._id = _id.randomUUID();
+		this._id = UUID.randomUUID();
 		this.title = title;
 	}
 
@@ -67,7 +66,7 @@ public class Project implements ObjectDB {
 
 	/**
 	 * return the Project on Json format
-	 */
+	 
 	public String toJson() {
 
 		return "{\"_id\" : \"" + this._id + "\" ,\"title\" : \"" + this.title + "\"}";
@@ -75,7 +74,7 @@ public class Project implements ObjectDB {
 	}
 	/**
 	 * return the Project on Json format with the email list
-	 */
+	 
 	public String toJsonWithMembers() {
 		if (listMail != null) {
 			String json = "{\"_id\" : \"" + this._id + "\" ,\"title\" : \"" + this.title
@@ -90,5 +89,6 @@ public class Project implements ObjectDB {
 		return null;
 
 	}
+	*/
 
 }

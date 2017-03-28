@@ -10,6 +10,6 @@ public interface ObjectDB {
 	 * return the object in Json format
 	 * @return
 	 */
-	public String toJson();
+	//public String toJson();
 
 }

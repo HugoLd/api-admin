@@ -33,13 +33,13 @@ public class Projects {
 	 */
 	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String saveProjects(@RequestParam(value = "title", required = false) String title) {
+	public Project saveProjects(@RequestParam(value = "title", required = false) String title) {
 
 		if (title != null && checkTitleNotExisting(title)) {
 			Project p = new Project(title);
 			prim.saveObject(p);
 
-			return p.toJson();
+			return p;
 		}
 		throw new EmptyResultDataAccessException(0);
 		
@@ -60,7 +60,9 @@ public class Projects {
 	}
 	*/
 	private boolean IsAnEmail(String email) {
-		// TODO Auto-generated method stub
+		if(email.split("#").length == 2 && email.length()>6 && email.length() < 20){
+			return true;
+		}
 		return false;
 	}
 
