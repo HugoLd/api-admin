@@ -74,10 +74,30 @@ public class ControllerProjectsTest extends TestCase {
 		ps.saveProjects(null);
 	}
 	@Test(expected=EmptyResultDataAccessException.class)
-	public void testSaveProject_shouldBeAnERDAEException_whenAlreadyExist(){
-		when(prim.getObjectByTitle("hello")).thenReturn(new Project("hello"));
-		ps.saveProjects("hello");
-		verify(prim).getObjectByTitle("hello");
+	public void testaddEmail_shouldBeAnERDAEException_whenProjectDoesntExist(){
+		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
+		when(prim.getObject(uuid)).thenReturn(null);
+		ps.addEmail("hello@gmail.com", uuid);
+		verify(prim).getObject(uuid);
+	}
+
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void testaddEmail_shouldBeAnERDAEException_whenEmailIsNull(){
+		Project proj = new Project("hello");
+		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
+		proj.set_id(uuid);
+		when(prim.getObject(uuid)).thenReturn(proj);
+		ps.addEmail(null, uuid);
+		verify(prim).getObject(uuid);
+	}
+	@Test(expected=EmptyResultDataAccessException.class)
+	public void testaddEmail_shouldBeAnERDAEException_whenEmailIncorrect(){
+		Project proj = new Project("hello");
+		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
+		proj.set_id(uuid);
+		when(prim.getObject(uuid)).thenReturn(proj);
+		ps.addEmail("a@a.a", uuid);
+		verify(prim).getObject(uuid);
 	}
 
 }

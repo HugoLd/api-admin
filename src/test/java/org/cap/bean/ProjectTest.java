@@ -1,11 +1,9 @@
 package org.cap.bean;
 
 import java.util.UUID;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import junit.framework.TestCase;
 
 public class ProjectTest extends TestCase {
@@ -24,7 +22,7 @@ public class ProjectTest extends TestCase {
 		super.tearDown();
 	}
 	@Test
-	public void testConstructor_shouldBeEqualToTitle_whenCallConstructor() {
+	public void testConstructor_shouldBeEqualToTitle_whenCall() {
 		assertEquals(p.title, title);
 
 	}
@@ -52,5 +50,19 @@ public class ProjectTest extends TestCase {
 		p.set_id(id);
 		assertEquals(id,p._id);
 	}
+	@Test
+	public void testAddToList_shouldListBeInstanciatied_whenNull(){
+		p.setListMail(null);
+		p.addToList("hello@test.com");
+		assertTrue(p.listMail != null);
+	}
+	@Test
+	public void testAddToList_shouldBeAdded_whenCall(){
+		String mail = "hellotest@test.com";
+		p.setListMail(null);
+		p.addToList(mail);
+		assertTrue(p.getListMail().contains(mail));
+	}
+	
 
 }

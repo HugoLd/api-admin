@@ -1,5 +1,6 @@
 package org.cap.repo;
 
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import org.cap.bean.Project;
@@ -70,37 +71,21 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * @param title
 	 * @return
 	 */
-	public Project getObjectByID(String uuid) {
-		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(uuid)), Project.class, "projects");
+	public Project getObject(String id) {
+		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
 
 	}
 
 	public void deleteObject(String uuid) {
 		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class,"projects");
 	}
-	/*
-	 * public WriteResult updateObject(String uuid, List<String> list) {
-		Update u =  new Update();
-		u.set("listMail", list);
-		return mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(uuid)), new Update(), Project.class,"projects");
-
-	}
-	 * 
-	 * 
-	 */
-
 	
-	/*
-	 * NEXT SPRINT
-	 * 
-	 * @Override public List<Project> getAllObjects() { // TODO Auto-generated
-	 * method stub return null; }
-	 * 
-	 * @Override public void deleteObject(String id) { // TODO Auto-generated
-	 * method stub
-	 * 
-	 * }
-	 * 
-	 */
+	public List<Project> getAllObjects() {	
+		Query q = new Query();
+		q.fields().include("_id");
+		q.fields().include("title");		
+		return mongoTemplate.find(q,Project.class, "projects");
+	}
+	
 
 }

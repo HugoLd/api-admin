@@ -6,6 +6,9 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+
 /**
  * Bean Project annotated to be insert in a mongo db
  * 
@@ -13,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  */
 @Document
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Project {
 	@Id
 	protected String _id;
@@ -31,10 +35,13 @@ public class Project {
 	}
 	
 	public void addToList(String s){
-		if( listMail == null || listMail.isEmpty()){
+		checkListNullOrEmpty();
+		listMail.add(s);
+	}
+	public void checkListNullOrEmpty(){
+		if( listMail == null){
 			listMail = new ArrayList<String>();
 		}
-		listMail.add(s);
 	}
 	// <accessors>
 	/**
