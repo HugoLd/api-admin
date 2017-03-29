@@ -5,35 +5,29 @@ import static org.mockito.Mockito.when;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.ContextConfiguration;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerProjectsTest extends TestCase {
-	@Mock
-	public Project p;
 	@InjectMocks
 	public Projects ps;
 	@Mock
 	ProjectRepoImplMongo prim;
-	public String title;
-
+	
+	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		String title = Math.random()+"ARP";
-		ps = new Projects();
-		p = new Project(title);
 	}
-	@Test
+	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}

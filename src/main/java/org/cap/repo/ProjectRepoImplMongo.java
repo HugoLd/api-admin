@@ -1,9 +1,7 @@
 package org.cap.repo;
 
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-
 import org.cap.bean.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +10,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
 import com.mongodb.MongoClient;
 
 /**
@@ -54,36 +51,50 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		mongoTemplate.insert(object, "projects");
 
 	}
+
 	/**
 	 * return the first project to match the given title
+	 * 
 	 * @param title
 	 * @return
 	 */
 	public Project getObjectByTitle(String title) {
 
 		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class, "projects");
-		
+
 	}
-	
+
 	/**
 	 * return the first project to match the given UUID
+	 * 
 	 * @param title
 	 * @return
 	 */
-	public Project getObjectByID(UUID id) {
+	public Project getObjectByID(String uuid) {
+		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(uuid)), Project.class, "projects");
 
-		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
-		
 	}
 
+	public void deleteObject(String uuid) {
+		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class,"projects");
+	}
+	/*
+	 * public WriteResult updateObject(String uuid, List<String> list) {
+		Update u =  new Update();
+		u.set("listMail", list);
+		return mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(uuid)), new Update(), Project.class,"projects");
+
+	}
+	 * 
+	 * 
+	 */
+
+	
 	/*
 	 * NEXT SPRINT
 	 * 
 	 * @Override public List<Project> getAllObjects() { // TODO Auto-generated
 	 * method stub return null; }
-	 * 
-	 * @Override public WriteResult updateObject(String id, String name) { //
-	 * TODO Auto-generated method stub return null; }
 	 * 
 	 * @Override public void deleteObject(String id) { // TODO Auto-generated
 	 * method stub

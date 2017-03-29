@@ -2,22 +2,24 @@ package org.cap.bean;
 
 import java.util.UUID;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class TestProject extends TestCase {
+public class ProjectTest extends TestCase {
 
 	public Project p;
 	public String title;
-
+	@Before
 	protected void setUp() throws Exception {
 		title = "Management";
 		p = new Project(title);
 		super.setUp();
 
 	}
-	@Test
+	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}
@@ -46,7 +48,7 @@ public class TestProject extends TestCase {
 	}
 	@Test
 	public void testSetUUID_shouldBeEqualToTheUUID_whenSet(){
-		UUID id = UUID.randomUUID();
+		String id = UUID.randomUUID().toString();
 		p.set_id(id);
 		assertEquals(id,p._id);
 	}

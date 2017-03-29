@@ -31,9 +31,9 @@ public interface Repo<T>{
 	//public WriteResult updateObject(<T> object);
 	/**
 	 * delete an object in the db
-	 * NEXT SPRINT
+	 *
 	 */
-	//public void deleteObject(String id);
+	public void deleteObject(String id);
 
 
 }

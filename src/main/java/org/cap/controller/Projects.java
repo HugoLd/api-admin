@@ -1,8 +1,6 @@
 package org.cap.controller;
 
 import java.io.IOException;
-import java.util.UUID;
-
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,31 +42,42 @@ public class Projects {
 		throw new EmptyResultDataAccessException(0);
 		
 	}
-	/*
+	
 	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public String addEmail(@RequestParam(value = "email", required = false) String email,@PathVariable("uiid") String uuid) {
-
+	public Project addEmail(@RequestParam(value = "email", required = false) String email,@PathVariable("uuid") String uuid) {
+	
 		if (email != null && checkEmailNotInProject(email) && IsAnEmail(email) ) {
-			
-			Project p = prim.getObjectByID(UUID.fromString(id));
-			
-			return p.toJson();
+			Project p = prim.getObjectByID(uuid);
+			p.addToList(email);
+			prim.deleteObject(uuid);
+			prim.saveObject(p);
+			return p;
 		}
 		throw new EmptyResultDataAccessException(0);
+	
 		
 	}
-	*/
+	
+	/**
+	 * check if it seems to be a real email
+	 * @param email
+	 * @return
+	 */
 	protected boolean IsAnEmail(String email) {
 		if(email.split("@").length == 2 && email.length()>6 && email.length() < 30 && email.contains(".")){
 			return true;
 		}
 		return false;
 	}
-
+	/**
+	 * check that the email is not already existing in the project
+	 * @param email
+	 * @return boolean
+	 */
 	protected boolean checkEmailNotInProject(String email) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	/**
