@@ -5,7 +5,6 @@
 	<groupId>org.cap</groupId>
 	<artifactId>projet-xml</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
 	<name>projet-xml</name>
 	<url>http://maven.apache.org</url>
@@ -29,11 +28,6 @@
 		</plugins>
 	</build>
 	<dependencies>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>

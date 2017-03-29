@@ -83,6 +83,17 @@ public class Projects {
 		return prim.getAllObjects();
 
 	}
+	/**
+	 * 
+	 * @param uuid
+	 * @return project
+	 */
+	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseStatus(HttpStatus.OK)
+	public Project getProject(@PathVariable("uuid") String uuid) {
+		return prim.getObject(uuid);
+
+	}
 
 	/**
 	 * check if it seems to be a real email

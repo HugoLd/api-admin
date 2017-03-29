@@ -69,23 +69,27 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * return the first project to match the given UUID
 	 * 
 	 * @param title
-	 * @return
+	 * @return project
 	 */
 	public Project getObject(String id) {
 		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
 
 	}
-
+	
 	public void deleteObject(String uuid) {
 		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class,"projects");
 	}
-	
+	/**
+	 * get all the projects in the base ( format _id , title)
+	 * @return
+	 */
 	public List<Project> getAllObjects() {	
 		Query q = new Query();
 		q.fields().include("_id");
 		q.fields().include("title");		
 		return mongoTemplate.find(q,Project.class, "projects");
 	}
+	
 	
 
 }
