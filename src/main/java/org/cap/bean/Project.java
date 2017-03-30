@@ -1,6 +1,7 @@
 package org.cap.bean;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -19,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Project {
 	@Id
-	protected String _id;
+	protected String id;
 	protected String title;
-	protected ArrayList<String> listMail;
+	protected ArrayList<String> mails;
 
 	/**
 	 * Constructor generating UUID
@@ -29,35 +30,26 @@ public class Project {
 	 * @param title
 	 */
 	public Project(String title) {
-		this._id = UUID.randomUUID().toString();
+		this.id = UUID.randomUUID().toString();
 		this.title = title;
-		listMail = null;
+		mails = null;
 	}
 	
-	public void addToList(String s){
-		checkListNullOrEmpty();
-		listMail.add(s);
-	}
-	public void checkListNullOrEmpty(){
-		if( listMail == null){
-			listMail = new ArrayList<String>();
-		}
-	}
 	// <accessors>
 	/**
 	 * 
 	 * @return the id
 	 */
-	public String get_id() {
-		return _id;
+	public String getId() {
+		return id;
 	}
 
 	/**
 	 * 
 	 * @param Id
 	 */
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**
@@ -79,15 +71,18 @@ public class Project {
 	 * 
 	 * @return
 	 */
-	public ArrayList<String> getListMail() {
-		return listMail;
+	public List<String> getMails() {
+		if(mails == null){
+			mails = new ArrayList<String>();
+		}
+		return mails;
 	}
 	/**
 	 * 
-	 * @param listMail
+	 * @param mails
 	 */
-	public void setListMail(ArrayList<String> listMail) {
-		this.listMail = listMail;
+	public void setMails(ArrayList<String> mails) {
+		this.mails = mails;
 	}
 
 	// </accessors>

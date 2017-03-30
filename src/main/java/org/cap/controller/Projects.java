@@ -61,10 +61,11 @@ public class Projects {
 	public Project addEmail(@RequestParam(value = "email", required = false) String email,
 			@PathVariable("uuid") String uuid) {
 		Project p = prim.getObject(uuid);
+		List<String> listMail ;
 		if (p != null && email != null && IsAnEmail(email)) {
-			p.checkListNullOrEmpty();
-			if (!p.getListMail().contains(email)) {
-				p.addToList(email);
+			listMail = p.getMails();
+			if (!p.getMails().contains(email)) {
+				listMail.add(email);
 				prim.deleteObject(uuid);
 				prim.saveObject(p);
 			}
