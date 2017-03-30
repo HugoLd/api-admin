@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.cap.bean.Project;
-import org.cap.repo.ProjectRepoImplMongo;
+import org.cap.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Projects {
 	@Autowired
-	protected ProjectRepoImplMongo prim;
+	protected ProjectService pServ;
 
 	/**
 	 * try to add a project when POST on /projects if request is ok return 201 +
@@ -38,15 +38,7 @@ public class Projects {
 	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Project saveProjects(@RequestParam(value = "title", required = false) String title) {
-
-		if (title != null && checkTitleNotExisting(title)) {
-			Project p = new Project(title);
-			prim.saveObject(p);
-
-			return p;
-		}
-		throw new EmptyResultDataAccessException(0);
-
+		return pServ.saveProjects(title);
 	}
 
 	/**
@@ -60,18 +52,7 @@ public class Projects {
 	@ResponseStatus(HttpStatus.OK)
 	public Project addEmail(@RequestParam(value = "email", required = false) String email,
 			@PathVariable("uuid") String uuid) {
-		Project p = prim.getObject(uuid);
-		List<String> listMail ;
-		if (p != null && email != null && IsAnEmail(email)) {
-			listMail = p.getMails();
-			if (!p.getMails().contains(email)) {
-				listMail.add(email);
-				prim.deleteObject(uuid);
-				prim.saveObject(p);
-			}
-			return p;
-		}
-		throw new EmptyResultDataAccessException(0);
+		return pServ.addEmail(email, uuid);
 
 	}
 	/**
@@ -81,7 +62,7 @@ public class Projects {
 	@RequestMapping(value = "/projects", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Project> getProjects() {
-		return prim.getAllObjects();
+		return pServ.getProjects();
 
 	}
 	/**
@@ -92,36 +73,11 @@ public class Projects {
 	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
 	public Project getProject(@PathVariable("uuid") String uuid) {
-		return prim.getObject(uuid);
+		return pServ.getProject(uuid);
 
 	}
 
-	/**
-	 * check if it seems to be a real email
-	 * 
-	 * @param email
-	 * @return
-	 */
-	protected boolean IsAnEmail(String email) {
-		if (email.split("@").length == 2 && email.length() > 6 && email.length() < 30 && email.contains(".")) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * check if the title is already existing in the base
-	 * 
-	 * @param title
-	 * @return
-	 */
-	protected boolean checkTitleNotExisting(String title) {
-		Project p = prim.getObjectByTitle(title);
-		if (p == null) {
-			return true;
-		}
-		return false;
-	}
+	
 
 	/**
 	 * to return 400 on error

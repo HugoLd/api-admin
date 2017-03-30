@@ -14,6 +14,7 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+	<context:component-scan base-package="org.cap.service" />
 	<context:component-scan base-package="org.cap.repo" />
 	<context:component-scan base-package="org.cap.bean" />
 	<context:component-scan base-package="org.cap.controller"
