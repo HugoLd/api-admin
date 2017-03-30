@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Project {
 	@Id
-	protected String id;
-	protected String title;
-	protected ArrayList<String> mails;
+	private String id;
+	private String title;
+	private List<String> mails;
 
 	/**
 	 * Constructor generating UUID
@@ -81,7 +81,7 @@ public class Project {
 	 * 
 	 * @param mails
 	 */
-	public void setMails(ArrayList<String> mails) {
+	public void setMails(List<String> mails) {
 		this.mails = mails;
 	}
 

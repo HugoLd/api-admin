@@ -23,38 +23,32 @@ public class ProjectTest extends TestCase {
 	}
 	@Test
 	public void testConstructor_shouldBeEqualToTitle_whenCall() {
-		assertEquals(p.title, title);
+		assertEquals(p.getTitle(), title);
 
 	}
 	@Test
 	public void testConstructor_shouldntBeNull_whenCall() {
-		assertTrue(p.id != null);
+		assertTrue(p.getId() != null);
 	}
-	@Test
-	public void testGetTitle_shouldBeEqualToTheTitle_whenCall() {
-		assertEquals(p.getTitle(),p.title);
-	}
+	
 	@Test
 	public void testSetTitle_shouldBeEqualTothe_whenSet() {
 		String tit = "testSetTitle";
 		p.setTitle(tit);
-		assertEquals(p.title, tit);
+		assertEquals(p.getTitle(), tit);
 	}
-	@Test
-	public void testGetUUID_shouldBeEqualToTheUUID_WhenCall(){
-		assertEquals(p.id,p.getId());
-	}
+	
 	@Test
 	public void testSetUUID_shouldBeEqualToTheUUID_whenSet(){
 		String id = UUID.randomUUID().toString();
 		p.setId(id);
-		assertEquals(id,p.id);
+		assertEquals(id,p.getId());
 	}
 	@Test
 	public void testAddToList_shouldListBeInstanciatied_whenNull(){
 		p.setMails(null);
 		p.getMails().add("hello@test.com");
-		assertTrue(p.mails != null);
+		assertTrue(p.getMails() != null);
 	}
 	@Test
 	public void testAddToList_shouldBeAdded_whenCall(){

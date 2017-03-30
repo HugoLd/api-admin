@@ -10,11 +10,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 
 /**
@@ -28,17 +31,22 @@ public class Projects {
 	@Autowired
 	protected ProjectService pServ;
 
+
 	/**
 	 * try to add a project when POST on /projects if request is ok return 201 +
 	 * Project Json if not ok return 400
 	 * 
 	 * @param title
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
 	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Project saveProjects(@RequestParam(value = "title", required = false) String title) {
-		return pServ.saveProjects(title);
+	public Project saveProjects(@RequestBody(required = false) String json) throws JsonParseException, JsonMappingException, IOException {
+			    
+		return pServ.saveProjects(json);
 	}
 
 	/**
@@ -47,12 +55,16 @@ public class Projects {
 	 * @param email
 	 * @param uuid
 	 * @return project
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
+	 * @throws EmptyResultDataAccessException 
 	 */
 	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
-	public Project addEmail(@RequestParam(value = "email", required = false) String email,
-			@PathVariable("uuid") String uuid) {
-		return pServ.addEmail(email, uuid);
+	public Project addEmail(@RequestBody(required = false) String json,
+			@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
+		return pServ.addEmail(json, uuid);
 
 	}
 	/**
@@ -74,6 +86,12 @@ public class Projects {
 	@ResponseStatus(HttpStatus.OK)
 	public Project getProject(@PathVariable("uuid") String uuid) {
 		return pServ.getProject(uuid);
+
+	}
+	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseStatus(HttpStatus.OK)
+	public boolean sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException{
+		return pServ.sendMail(uuid);
 
 	}
 
