@@ -1,2 +1,4 @@
-org\cap\bean\Project.class
+org\cap\repo\ProjectRepoImplMongo.class
 org\cap\controller\Projects.class
+org\cap\bean\Project.class
+org\cap\repo\Repo.class
