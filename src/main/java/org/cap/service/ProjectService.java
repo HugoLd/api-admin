@@ -1,6 +1,9 @@
 package org.cap.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,12 +155,32 @@ public class ProjectService {
 
 	}
 	
-	public boolean sendMail(String uuid) throws IOException, TemplateException {
+	public void sendMail(String uuid) throws IOException, TemplateException {
 		Project p = prim.getObject(uuid);
+		HashMap<String,Object> props= new HashMap<String,Object>();
+		props.put("date", getDateNow());		
+		props.put("url",generateLinks());
+		
+		
 		if(uuid != null && p != null){
-			ms.sendEmail(new HashMap<String,Object>(), p.getMails());
-			return false;
+			ms.sendEmail(props, p.getMails());
 		}
 		throw new EmptyResultDataAccessException(0);
+	}
+	
+	public String getDateNow(){
+		 Date date = Calendar.getInstance().getTime();		 
+		 SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd/MM/yyyy");
+	     return formatter.format(date);
+	}
+	
+	public String[] generateLinks(){
+		String[] tabDate = new String[5];
+		tabDate[0] = "http://www.google.com";
+		tabDate[1] = "http://www.facebook.com";
+		tabDate[2] = "http://www.amazon.com";
+		tabDate[3] = "http://www.youtube.com";
+		tabDate[4] = "http://www.wikipedia.org";
+		return tabDate;
 	}
 }

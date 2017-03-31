@@ -8,7 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
 
 @Configuration
@@ -17,6 +16,10 @@ public class MailConfigurer {
 
 	@Autowired
 	private Environment environment; // getting environment for properties
+	/**
+	 * initialize the sender
+	 * @return
+	 */
 	public JavaMailSender initMailSender(){
 		JavaMailSenderImpl jms = new JavaMailSenderImpl();
 		jms.setHost(environment.getProperty("smtp.host"));
@@ -33,7 +36,10 @@ public class MailConfigurer {
         return jms;
 		
 	}
-    
+    /**
+     * 
+     * @return the from address
+     */
     public String getAddress(){
     	return environment.getProperty("smtp.address");
     }

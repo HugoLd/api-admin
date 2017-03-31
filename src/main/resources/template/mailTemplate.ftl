@@ -1,20 +1,24 @@
+<#ftl encoding="utf-8">
 <html>
+<head>
+<meta charset="UTF-8">
+</head>
 <body>
   <h3>
-    Hi "name",
+    Bonjour,
   </h3>
   <h4>
-  	How was your "date" day?
+  	Comment s'est passée votre journée du ${date} ?
   </h4> 
   <ol>
-  	<li><a href="url">Really hard</a></li>
-  	<li><a href="url">Hard</a></li>
-  	<li><a href="url">Average</a></li>
-  	<li><a href="url">Good</a></li>
-  	<li><a href="url">Really good</a></li>
+  	<li><a href=${url[0]}>Really hard</a></li>
+  	<li><a href=${url[1]}>Hard</a></li>
+  	<li><a href=${url[2]}>Average</a></li>
+  	<li><a href=${url[3]}>Good</a></li>
+  	<li><a href=${url[4]}>Really good</a></li>
   </ol>
   <br/>
-  <p>Don't forget that all of this is anonymous !</p>
+  <p> Ne vous en faites pas , vos réponses sont anonyme !</p>
   
 </body>
 </html>

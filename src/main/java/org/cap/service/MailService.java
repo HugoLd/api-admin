@@ -14,6 +14,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -40,18 +41,20 @@ public class MailService {
 	public void sendEmail( Map<String, Object> templatedMimeMessage, List<String> addresses)
 			throws IOException, TemplateException {
 		String address = config.getAddress();
+		Template temp;
 		mailSender = config.initMailSender();
 		FileTemplateLoader templateLoader = null;
 		System.out.println(new File(getClass().getClassLoader().getResource("template").getFile()));
 		templateLoader = new FileTemplateLoader(new File(getClass().getClassLoader().getResource("template").getFile()));
 		freemarkerConfiguration.setTemplateLoader(templateLoader);
+		temp = freemarkerConfiguration.getTemplate("mailTemplate.ftl");		
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			String messageText = FreeMarkerTemplateUtils.processTemplateIntoString(
-					freemarkerConfiguration.getTemplate("mailTemplate.ftl"), templatedMimeMessage);
+					temp, templatedMimeMessage);
 
 			@Override
 			public void prepare(MimeMessage message) throws Exception {
-				MimeMessageHelper helper = new MimeMessageHelper(message, true);
+				MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
 				for (String address : addresses) {
 					helper.addTo(address);
 				}
@@ -59,7 +62,7 @@ public class MailService {
 				helper.setFrom(address);
 				helper.setSubject("Daily mood");
 
-				helper.setText(messageText, true);
+				helper.setText(messageText,true);
 			}
 
 		};

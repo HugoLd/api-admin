@@ -92,14 +92,15 @@ public class Projects {
 	}
 	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
-	public boolean sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException{
+	public void sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException{
 		try {
-			return pServ.sendMail(uuid);
+			pServ.sendMail(uuid);
+			
 		} catch (IOException | TemplateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		
 
 	}
 
