@@ -12,8 +12,9 @@
 	<beans:bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="suffix" value=".jsp" />		
 	</beans:bean>
+	<beans:bean id="freemarkerConfiguration" class="freemarker.template.Configuration" />
 	<context:component-scan base-package="org.cap.service" />
 	<context:component-scan base-package="org.cap.repo" />
 	<context:component-scan base-package="org.cap.bean" />

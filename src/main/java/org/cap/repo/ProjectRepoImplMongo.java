@@ -32,9 +32,9 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	@PostConstruct
 	public void init() {
-		MongoClient mongo = new MongoClient(environment.getProperty("host"),
-				Integer.parseInt(environment.getProperty("port")));
-		mongoTemplate = new MongoTemplate(mongo, environment.getProperty("database"));
+		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
+				Integer.parseInt(environment.getProperty("mongo.port")));
+		mongoTemplate = new MongoTemplate(mongo, environment.getProperty("mongo.database"));
 
 	}
 

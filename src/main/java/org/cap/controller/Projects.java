@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import freemarker.template.TemplateException;
+
 
 /**
  * Controller on /projects call
@@ -91,7 +93,13 @@ public class Projects {
 	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
 	public boolean sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException{
-		return pServ.sendMail(uuid);
+		try {
+			return pServ.sendMail(uuid);
+		} catch (IOException | TemplateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 
 	}
 

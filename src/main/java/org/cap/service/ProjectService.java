@@ -1,7 +1,9 @@
 package org.cap.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
@@ -13,6 +15,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import freemarker.template.TemplateException;
 
 @Service
 public class ProjectService {
@@ -148,10 +152,10 @@ public class ProjectService {
 
 	}
 	
-	public boolean sendMail(String uuid) {
+	public boolean sendMail(String uuid) throws IOException, TemplateException {
 		Project p = prim.getObject(uuid);
 		if(uuid != null && p != null){
-			ms.affiche();
+			ms.sendEmail(new HashMap<String,Object>(), p.getMails());
 			return false;
 		}
 		throw new EmptyResultDataAccessException(0);
