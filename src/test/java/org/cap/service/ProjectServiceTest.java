@@ -4,6 +4,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
@@ -79,9 +81,36 @@ public class ProjectServiceTest extends TestCase {
 	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
-	public void testSaveProject_shouldBeAnERDAEException_whenTitleNull() throws  JsonParseException, JsonMappingException, IOException {
+	public void testSaveProject_shouldBeAnERDAEException_whenJsonNull()
+			throws JsonParseException, JsonMappingException, IOException {
 
 		pServ.saveProjects(null);
+
+	}
+
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleNull()
+			throws JsonParseException, JsonMappingException, IOException {
+
+		pServ.saveProjects("{\"title\":null}");
+
+	}
+
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleAlreadyExist()
+			throws JsonParseException, JsonMappingException, IOException {
+		when(prim.getObjectByTitle("hello")).thenReturn(new Project("hello"));
+		pServ.saveProjects("{\"title\":\"hello\"}");
+		verify(prim).getObjectByTitle("hello");
+
+	}
+
+	@Test
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleNotExist()
+			throws JsonParseException, JsonMappingException, IOException {
+		when(prim.getObjectByTitle("hello")).thenReturn(null);
+		pServ.saveProjects("{\"title\":\"hello\"}");
+		verify(prim).getObjectByTitle("hello");
 
 	}
 
@@ -116,6 +145,78 @@ public class ProjectServiceTest extends TestCase {
 		when(prim.getObject(uuid)).thenReturn(proj);
 		pServ.addEmail("{\"email\":\"a@a.a\"}", uuid);
 		verify(prim).getObject(uuid);
+	}
+
+	@Test
+	public void testAddEmail_shouldPass_whenEvtgOk() throws JsonParseException, JsonMappingException, IOException {
+		Project proj = new Project("hello");
+		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
+		proj.setId(uuid);
+		when(prim.getObject(uuid)).thenReturn(proj);
+		pServ.addEmail("{\"email\":\"hlld@hotmail.fr\"}", uuid);
+		verify(prim).getObject(uuid);
+	}
+
+	@Test
+	public void testAddEmail_shouldntDoAnything_whenEmailAlreadyExist()
+			throws JsonParseException, JsonMappingException, IOException {
+		Project proj = new Project("hello");
+		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
+		proj.setId(uuid);
+		List<String> list = new ArrayList<String>();
+		list.add("hlld@hotmail.fr");
+		proj.setMails(list);
+		when(prim.getObject(uuid)).thenReturn(proj);
+		pServ.addEmail("{\"email\":\"hlld@hotmail.fr\"}", uuid);
+		verify(prim).getObject(uuid);
+	}
+
+	@Test
+	public void testGetProjects_shouldNotBeNull_whenProjectIn() {
+		List<Project> lp = new ArrayList<Project>();
+		lp.add(new Project("test"));
+		when(prim.getAllObjects()).thenReturn(lp);
+		assertTrue(pServ.getProjects() != null);
+		verify(prim).getAllObjects();
+	}
+
+	@Test
+	public void testGetProjects_shouldBeNull_whenNoProjectIn() {
+		when(prim.getAllObjects()).thenReturn(null);
+		assertTrue(pServ.getProjects() == null);
+		verify(prim).getAllObjects();
+	}
+
+	@Test
+	public void testGetProject_shouldNotBeNull_whenProjectExist() {
+		Project proj = new Project("test");
+		proj.setId("202d4355-6a2e-4269-8ca9-49095acfe210");
+		when(prim.getObject("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(proj);
+		assertTrue(pServ.getProject("202d4355-6a2e-4269-8ca9-49095acfe210") != null);
+		verify(prim).getObject("202d4355-6a2e-4269-8ca9-49095acfe210");
+	}
+	
+	@Test
+	public void testgetNode_shouldBeNull_whenWrongJson() {
+
+		assertEquals(pServ.getNode("sfsf", "title"), null);
+
+	}
+	@Test
+	public void testgetNode_shouldBeNull_whenTitleNull() {
+
+		assertEquals(pServ.getNode("{\"author\" : \"Hugo\"", "title"), null);
+
+	}
+
+	@Test
+	public void testValidJson_shouldBeFalse_whenWrongJson() {
+		assertEquals(pServ.validJson("dfdsf"), false);
+	}
+
+	@Test
+	public void testValidJson_shouldBeTrue_whenGoodJson() {
+		assertEquals(pServ.validJson("{\"email\":\"hlld@hotmail.fr\"}"), true);
 	}
 
 }

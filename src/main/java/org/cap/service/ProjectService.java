@@ -1,12 +1,8 @@
 package org.cap.service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
@@ -41,45 +37,52 @@ public class ProjectService {
 	 */
 	public Project saveProjects(String json)
 			throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
-		String title = getNode(json , "title");
-		
-		if (title != null && checkTitleNotExisting(title)) {
+		if (validJson(json)) {
+			String title = getNode(json, "title");
+			if (checkTitleNotExisting(title) && title != null) {
 				Project p = new Project(title);
 				prim.saveObject(p);
-
 				return p;
 			}
-		
+		}
+
 		throw new EmptyResultDataAccessException(0);
 
 	}
-	
-	public String getNode(String json, String var) throws JsonParseException, JsonMappingException, IOException{
-		String retrn = null;
-		if (json != null && validJson(json)) {
-			ObjectNode node = mapper.readValue(json, ObjectNode.class);
 
-			if (node.get(var) != null) {
-				retrn = node.get(var).textValue();
-				node.remove(var);
+	public String getNode(String json, String var) {
+		String retrn = null;
+		try {
+			if (json != null && validJson(json)) {
+				ObjectNode node = mapper.readValue(json, ObjectNode.class);
+
+				if (node.get(var) != null) {
+					retrn = node.get(var).textValue();
+					node.remove(var);
+				}
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return retrn;
 	}
+
 	/**
 	 * validate a json
+	 * 
 	 * @param jsonInString
 	 * @return
 	 */
-	 public static boolean validJson(String json ) {
-		    try {
-		       final ObjectMapper mapper = new ObjectMapper();
-		       mapper.readTree(json);
-		       return true;
-		    } catch (IOException e) {
-		       return false;
-		    }
-		  }
+	public boolean validJson(String json) {
+		try {
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.readTree(json);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	/**
 	 * try to add an email to a project document in mongo when POST
@@ -88,12 +91,13 @@ public class ProjectService {
 	 * @param email
 	 * @param uuid
 	 * @return project
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonParseException 
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonParseException
 	 */
-	public Project addEmail(String json, String uuid) throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
-		String email = getNode(json,"email");
+	public Project addEmail(String json, String uuid)
+			throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
+		String email = getNode(json, "email");
 		Project p = prim.getObject(uuid);
 		List<String> listMail;
 		if (p != null && email != null && IsAnEmail(email)) {
@@ -154,33 +158,33 @@ public class ProjectService {
 		return prim.getObject(uuid);
 
 	}
-	
-	public void sendMail(String uuid) throws IOException, TemplateException {
+
+	/**
+	 * send all the mail in the project with given uuid
+	 * 
+	 * @param uuid
+	 */
+	public void sendMail(String uuid) {
 		Project p = prim.getObject(uuid);
-		HashMap<String,Object> props= new HashMap<String,Object>();
-		props.put("date", getDateNow());		
-		props.put("url",generateLinks());
-		
-		
-		if(uuid != null && p != null){
-			ms.sendEmail(props, p.getMails());
+
+		HashMap<String, Object> props;
+		List<String> listMail;
+		if (uuid != null && p != null && ms.checkProperties()) {
+			try {
+				props = new HashMap<String, Object>();
+				listMail = p.getMails();
+				props.put("date", ms.getDateNowWithDayOfWeek());
+				String date = ms.getDateNow();
+				for (String mail : listMail) {
+					props.put("url", ms.generateLinks(uuid, mail, date));
+					ms.sendEmail(props, mail);
+				}
+			} catch (IOException | TemplateException e) {
+				throw new EmptyResultDataAccessException(0);
+			}
+		} else {
+			throw new EmptyResultDataAccessException(0);
 		}
-		throw new EmptyResultDataAccessException(0);
 	}
-	
-	public String getDateNow(){
-		 Date date = Calendar.getInstance().getTime();		 
-		 SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd/MM/yyyy");
-	     return formatter.format(date);
-	}
-	
-	public String[] generateLinks(){
-		String[] tabDate = new String[5];
-		tabDate[0] = "http://www.google.com";
-		tabDate[1] = "http://www.facebook.com";
-		tabDate[2] = "http://www.amazon.com";
-		tabDate[3] = "http://www.youtube.com";
-		tabDate[4] = "http://www.wikipedia.org";
-		return tabDate;
-	}
+
 }

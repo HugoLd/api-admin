@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -32,10 +33,20 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	@PostConstruct
 	public void init() {
+		checkProperties();
 		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
 				Integer.parseInt(environment.getProperty("mongo.port")));
 		mongoTemplate = new MongoTemplate(mongo, environment.getProperty("mongo.database"));
 
+	}
+	/**
+	 * chech if properties are well set
+	 * @return boolean
+	 */
+	public void checkProperties(){
+		if(environment.getProperty("mongo.host") == null || environment.getProperty("mongo.port") == null || environment.getProperty("mongo.database") == null){
+			throw new EmptyResultDataAccessException(0);
+		}
 	}
 
 	/**
@@ -49,6 +60,9 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	@Override
 	public void saveObject(Project object) {
+		if(object == null){
+			throw new EmptyResultDataAccessException(0);
+		}
 		mongoTemplate.insert(object, "projects");
 
 	}
@@ -60,7 +74,9 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * @return
 	 */
 	public Project getObjectByTitle(String title) {
-
+		if(title == null){
+			throw new EmptyResultDataAccessException(0);
+		}
 		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class, "projects");
 
 	}
@@ -72,11 +88,17 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * @return project
 	 */
 	public Project getObject(String id) {
+		if(id == null){
+			throw new EmptyResultDataAccessException(0);
+		}
 		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
 
 	}
 	
 	public void deleteObject(String uuid) {
+		if(uuid == null){
+			throw new EmptyResultDataAccessException(0);
+		}
 		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class,"projects");
 	}
 	/**
