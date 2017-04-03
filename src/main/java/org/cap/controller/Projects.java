@@ -3,7 +3,9 @@ package org.cap.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.cap.bean.Mood;
 import org.cap.bean.Project;
+import org.cap.service.MoodService;
 import org.cap.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,6 +32,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class Projects {
 	@Autowired
 	protected ProjectService pServ;
+	@Autowired
+	protected MoodService mServ;
 
 	/**
 	 * try to add a project when POST on /projects if request is ok return 201 +
@@ -92,7 +96,11 @@ public class Projects {
 		return pServ.getProject(uuid);
 
 	}
-
+	/**
+	 * Mapping for sending mail to all the team
+	 * @param uuid
+	 * @throws EmptyResultDataAccessException
+	 */
 	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
 	public void sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
@@ -100,7 +108,30 @@ public class Projects {
 		pServ.sendMail(uuid);
 
 	}
+	/**
+	 * get mood from an user
+	 * @param uuid
+	 * @param json
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/{uuid}/userMood", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseStatus(HttpStatus.OK)
+	public Mood addMood(@PathVariable("uuid") String uuid,@RequestBody(required = false)String json) throws EmptyResultDataAccessException {
+		return mServ.saveMood(uuid , json);
 
+	}
+
+	/**
+	 * get mood from an user
+	 * @param uuid
+	 * @param json
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseStatus(HttpStatus.OK)
+	public List<List<Mood>> getProjectMoods(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
+		return mServ.getProjectMoods(uuid);
+	}
 	/**
 	 * to return 400 on error
 	 * 
