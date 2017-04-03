@@ -2,6 +2,7 @@ package org.cap.service;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.atLeast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class ProjectServiceTest extends TestCase {
 	ProjectService pServ;
 	@Mock
 	ProjectRepoImplMongo prim;
+	@Mock
+	MailService ms;
 
 	@Before
 	public void setUp() throws Exception {
@@ -218,5 +221,38 @@ public class ProjectServiceTest extends TestCase {
 	public void testValidJson_shouldBeTrue_whenGoodJson() {
 		assertEquals(pServ.validJson("{\"email\":\"hlld@hotmail.fr\"}"), true);
 	}
+	
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void testsendMail_shouldBeAnERDAEException_whenNoProps() {		
+		when(ms.checkProperties()).thenReturn(false);
+		pServ.sendMail("202d4355-6a2e-4269-8ca9-49095acfe210");
+		verify(ms).checkProperties();
+	}
+	
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void testsendMail_shouldBeAnERDAEException_whenUUIDNull() {
+		pServ.sendMail(null);
+	}
+	@Test(expected = EmptyResultDataAccessException.class)
+	public void testsendMail_shouldBeAnERDAEException_whenProjectNull() {		
+		
+		when(prim.getObject("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(null);
+		pServ.sendMail("202d4355-6a2e-4269-8ca9-49095acfe210");
+		verify(prim).getObject("202d4355-6a2e-4269-8ca9-49095acfe210");
+	}
 
+	@Test
+	public void testsendMail_shouldNotBeAnERDAEException_whenNothingNullAndPropsOk() {		
+		String uuid ="202d4355-6a2e-4269-8ca9-49095acfe210";
+		Project proj = new Project("test");
+		proj.setId(uuid);
+		proj.getMails().add("azerty@poiuy.com");
+		proj.getMails().add("hellotest@mails.com");
+		when(prim.getObject(uuid)).thenReturn(proj);
+		when(ms.checkProperties()).thenReturn(true);
+		pServ.sendMail("202d4355-6a2e-4269-8ca9-49095acfe210");		
+		pServ.sendMail(uuid);
+		verify(prim,atLeast(1)).getObject(uuid);
+		verify(ms,atLeast(1)).checkProperties();
+	}
 }

@@ -40,7 +40,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 
 	}
 	/**
-	 * chech if properties are well set
+	 * check if properties are well set
 	 * @return boolean
 	 */
 	public void checkProperties(){
