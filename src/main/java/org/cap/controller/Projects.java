@@ -114,11 +114,12 @@ public class Projects {
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/userMood", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/projects/{uuid}/userMood", method = RequestMethod.POST, produces = "application/json; charset=utf-8" , consumes="application/json; charset=utf-8")
 	@ResponseStatus(HttpStatus.OK)
-	public Mood addMood(@PathVariable("uuid") String uuid,@RequestBody(required = false)String json) throws EmptyResultDataAccessException {
-		return mServ.saveMood(uuid , json);
-
+	public Mood addMood(@PathVariable("uuid") String uuid,@RequestBody(required = false)Mood mood) throws EmptyResultDataAccessException {
+		System.out.println("passed");
+//		return mServ.saveMood(uuid , json);
+return mood;
 	}
 
 	/**

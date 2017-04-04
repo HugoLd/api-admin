@@ -106,18 +106,22 @@ public class MoodService {
 	 * @return
 	 */
 	public Mood saveMood(String uuid, String json) throws EmptyResultDataAccessException {
+		System.out.println("passed");
+		System.out.println(json);
+		System.out.println(getNode(json,"mood_uuid"));
 		Mood m;
-		String comment;
+		String comment,uuidMood,date;
 		int mood;
-		String uuidMood;
 		if (checkSaveRequest(uuid, json)) {
 			uuidMood = getNode(json, "mood_uuid");
+			System.out.println(uuidMood);
 			mood = Integer.parseInt(getNode(json, "mood"));
+			date = getNode(json,"date");
 			if (checkContainsComment(json)) {
 				comment = getNode(json, "comment");
-				m = new Mood(uuidMood, uuid, mood, comment, getDateNow());
+				m = new Mood(uuidMood, uuid, mood, comment, date);
 			} else {
-				m = new Mood(uuidMood, uuid, mood, getDateNow());
+				m = new Mood(uuidMood, uuid, mood, date);
 			}
 			mrim.saveObject(m);
 			return m;
@@ -157,6 +161,7 @@ public class MoodService {
 	 * @return
 	 */
 	public String getNode(String json, String var) {
+		
 		String retrn = null;
 		try {
 			if (json != null && validJson(json)) {

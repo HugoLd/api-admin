@@ -166,7 +166,7 @@ public class ProjectService {
 	 */
 	public void sendMail(String uuid) {
 		Project p = prim.getObject(uuid);
-
+		System.out.println(p.getTitle());
 		HashMap<String, Object> props;
 		List<String> listMail;
 		if (uuid != null && p != null && ms.checkProperties()) {

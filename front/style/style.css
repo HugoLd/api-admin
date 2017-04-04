@@ -1,0 +1,96 @@
+<style type="text/css">
+.form-comment{
+    font: 95% Verdana;
+    max-width: 1000px;
+    margin: 10px auto;
+    padding: 16px;
+}
+.form-comment h1{
+    background: #0097E5 ;
+    padding: 20px 0;
+    font-size: 140%;
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+    margin: -16px -16px 16px -16px;
+}
+.form-comment input[type="text"],
+.form-comment input[type="date"],
+.form-comment input[type="datetime"],
+.form-comment input[type="email"],
+.form-comment input[type="number"],
+.form-comment input[type="search"],
+.form-comment input[type="time"],
+.form-comment input[type="url"],
+.form-comment textarea,
+.form-comment select 
+{
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    margin-bottom: 4%;
+    border: 1px solid #ccc;
+    padding: 3%;
+    color: #555;
+    font: 95% Arial, Helvetica, sans-serif;
+}
+.form-comment input[type="text"]:focus,
+.form-comment input[type="date"]:focus,
+.form-comment input[type="datetime"]:focus,
+.form-comment input[type="email"]:focus,
+.form-comment input[type="number"]:focus,
+.form-comment input[type="search"]:focus,
+.form-comment input[type="time"]:focus,
+.form-comment input[type="url"]:focus,
+.form-comment textarea:focus,
+.form-comment select:focus
+{
+    box-shadow: 0 0 5px #0097E5 ;
+    padding: 3%;
+    border: 1px solid #0097E5 ;
+}
+
+.form-comment input[type="submit"],
+.form-comment input[type="button"]{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 3%;
+    background:  #0097E5 ;
+    border-bottom: 2px solid #0187CD;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;    
+    color: #fff;
+}
+.form-comment input[type="submit"]:hover,
+.form-comment input[type="button"]:hover{
+    background: #0187CD;
+}
+
+.input_hidden {
+    position: absolute;
+    left: -9999px;
+}
+
+.selected {
+    background-color: #ccc;
+}
+
+#emotion label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#emotion label img {
+    padding: 3px;
+}
+</style>

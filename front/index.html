@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<LINK href="style/style.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+</head>
+<body>
+	<div class="form-comment">
+	<h1>Send a mood</h1>
+
+	<form id="moodSelector">
+
+		<textarea id="comment" name="comment" placeholder="Leave a comment"></textarea>
+
+		<div class="moods" >
+			<input type="radio" name="emotion" value="0" id="sad"/>
+			<label for="sad"><img src="img/emotion0.png" alt="Really Bad" /></label>
+			<input type="radio"  value="1" name="emotion" id="bad"/>
+			<label for="bad"><img src="img/emotion1.png" alt="Bad" /></label>
+			<input type="radio"  value="2"name="emotion" id="average"/>
+			<label for="average"><img src="img/emotion2.png" alt="Average" /></label>
+			<input type="radio"  value="3" name="emotion" id="good"/>
+			<label for="good"><img src="img/emotion3.png" alt="Good" /></label>
+			<input type="radio"  value="4" name="emotion" id="reallygood"/>
+			<label for="reallygood"><img src="img/emotion4.png" alt="Really Good" /></label>
+		</div>
+		<br>
+
+		<input type="submit" value="Submit"/>
+	</form>
+	<br>
+		
+
+	<script type='text/javascript' src="script/moods.js"></script>
+	</div>
+</body>
+</html>
