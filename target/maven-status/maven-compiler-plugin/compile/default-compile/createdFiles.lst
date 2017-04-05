@@ -1,6 +1,0 @@
-org\cap\repo\ProjectRepoImplMongo.class
-org\cap\bean\Project.class
-org\cap\service\MailService.class
-org\cap\service\ProjectService.class
-org\cap\controller\Projects.class
-org\cap\repo\Repo.class
