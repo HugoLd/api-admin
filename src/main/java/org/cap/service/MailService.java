@@ -148,11 +148,11 @@ public class MailService {
 		String baseLink = environment.getProperty("smtp.baseLink");
 		String uuMood = uuid+"#"+mail+"#"+date;
 		String[] tabDate = new String[5];
-		tabDate[0] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
+		tabDate[0] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"0&uuidmood="+uuMood;
 		tabDate[1] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
-		tabDate[2] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
-		tabDate[3] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
-		tabDate[4] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
+		tabDate[2] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"2&uuidmood="+uuMood;
+		tabDate[3] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"3&uuidmood="+uuMood;
+		tabDate[4] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"4&uuidmood="+uuMood;
 		return tabDate;
 	}
 

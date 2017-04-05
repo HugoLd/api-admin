@@ -1,4 +1,81 @@
 <style type="text/css">
+.form-project{
+    font: 95% Verdana;
+    max-width: 1000px;
+    margin: 10px auto;
+    padding: 16px;
+}
+.form-project h1{
+    background: #0097E5 ;
+    padding: 20px 0;
+    font-size: 140%;
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+    margin: -16px -16px 16px -16px;
+}
+.form-project input[type="text"],
+.form-project input[type="date"],
+.form-project input[type="datetime"],
+.form-project input[type="email"],
+.form-project input[type="number"],
+.form-project input[type="search"],
+.form-project input[type="time"],
+.form-project input[type="url"],
+.form-project textarea,
+.form-project select 
+{
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    margin-bottom: 4%;
+    border: 1px solid #ccc;
+    padding: 3%;
+    color: #555;
+    font: 95% Arial, Helvetica, sans-serif;
+}
+.form-project input[type="text"]:focus,
+.form-project input[type="date"]:focus,
+.form-project input[type="datetime"]:focus,
+.form-project input[type="email"]:focus,
+.form-project input[type="number"]:focus,
+.form-project input[type="search"]:focus,
+.form-project input[type="time"]:focus,
+.form-project input[type="url"]:focus,
+.form-project textarea:focus,
+.form-project select:focus
+{
+    box-shadow: 0 0 5px #0097E5 ;
+    padding: 3%;
+    border: 1px solid #0097E5 ;
+}
+
+.form-project input[type="submit"],
+.form-project input[type="button"]{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 3%;
+    background:  #0097E5 ;
+    border-bottom: 2px solid #0187CD;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;    
+    color: #fff;
+}
+.form-project input[type="submit"]:hover,
+.form-project input[type="button"]:hover{
+    background: #0187CD;
+}
+
 .form-comment{
     font: 95% Verdana;
     max-width: 1000px;

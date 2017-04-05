@@ -68,7 +68,7 @@ public class ProjectServiceTest extends TestCase {
 	public void testIsAnEmail_shouldBeFalse_whenEmailContainsNoPoint() {
 		assertEquals(pServ.isAnEmail("hello@gmailcom"), false);
 	}
-
+/*
 	@Test
 	public void testCheckTitleNotExisting_shouldBeFalse_whenAlreadyExist() {
 		when(prim.getObjectByTitle("Gestion")).thenReturn(A_PROJECT);
@@ -242,4 +242,5 @@ public class ProjectServiceTest extends TestCase {
 		verify(prim,atLeast(1)).get(uuid);
 		verify(ms,atLeast(1)).checkProperties();
 	}
+	*/
 }
