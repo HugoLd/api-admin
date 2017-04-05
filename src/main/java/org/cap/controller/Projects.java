@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.cap.bean.Mood;
 import org.cap.bean.Project;
+import org.cap.controller.bean.AddMoodInput;
 import org.cap.controller.bean.AddProjectInput;
 import org.cap.controller.bean.AddUserToProjectInput;
 import org.cap.controller.bean.ErrorOutput;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 /**
  * Controller on /projects call
@@ -103,36 +103,41 @@ public class Projects {
 
 	/**
 	 * Mapping for sending mail to all the team
+	 * 
 	 * @param uuid
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/projects/{uuidProj}/sendMail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
+	public void sendMail(@PathVariable("uuidProj") String uuid) {
 		pServ.sendMail(uuid);
 	}
 
 	/**
 	 * get mood from an user
+	 * 
 	 * @param uuid
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/projects/{uuidProj}/moods", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Mood addMood(@PathVariable("uuid") String uuid, @RequestBody Mood mood) throws EmptyResultDataAccessException {
-		return mServ.saveMood(mood);
+	public Mood addMood(@PathVariable("uuidProj") String uuidProj, @RequestBody AddMoodInput mood) {
+		mood.setUuidProj(uuidProj);
+		Mood moodToSave = new Mood(mood.getUuid(), uuidProj, mood.getMood(), mood.getComment(), mood.getDate());
+		return mServ.saveMood(moodToSave);
 	}
 
 	/**
 	 * get mood from an user
+	 * 
 	 * @param uuid
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/projects/{uuidProj}/moods", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<List<Mood>> getProjectMoods(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
+	public List<List<Mood>> getProjectMoods(@PathVariable("uuidProj") String uuid) {
 		return mServ.getProjectMoods(uuid);
 	}
 
@@ -142,9 +147,10 @@ public class Projects {
 	 * @param e
 	 * @throws IOException
 	 */
-	@ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class})
+	@ExceptionHandler({ IllegalArgumentException.class, HttpMessageNotReadableException.class })
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public void handleEmptyResult(final Exception e, final HttpServletRequest request, Writer writer) throws IOException {
+	public void handleEmptyResult(final Exception e, final HttpServletRequest request, Writer writer)
+			throws IOException {
 		ErrorOutput err = new ErrorOutput(e.getMessage());
 		writer.write(new ObjectMapper().writeValueAsString(err));
 	}

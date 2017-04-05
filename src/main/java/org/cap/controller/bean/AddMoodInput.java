@@ -1,28 +1,22 @@
-package org.cap.bean;
+package org.cap.controller.bean;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@Document
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Mood {
-	@Id
+public class AddMoodInput {
 	private String uuid;
-	private String uuidProj;	
+	private String uuidProj;
 	private int mood; 
 	private String comment;
 	private String date;
-
-	public Mood() {}
 	
-	public Mood(String uuid,String uuidProj,int mood,String comment,String date) {
+
+	public AddMoodInput(String uuid,int mood,String comment,String date) {
 		this.uuid = uuid;
-		this.uuidProj = uuidProj;
 		this.mood = mood;
 		this.comment = comment;
 		this.date = date;
+	}
+
+	public AddMoodInput() {
 	}
 
 	public String getUuid() {
@@ -31,13 +25,13 @@ public class Mood {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-
 	public String getUuidProj() {
 		return uuidProj;
 	}
 	public void setUuidProj(String uuidProj) {
 		this.uuidProj = uuidProj;
 	}
+
 
 	public int getMood() {
 		return mood;

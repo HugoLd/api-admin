@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MoodService {
 	@Autowired
 	MoodRepoImplMongo mrim;
-	ObjectMapper mapper = new ObjectMapper();
 
 	/**
 	 * get the list of daily moods' list
@@ -23,9 +21,9 @@ public class MoodService {
 	 * @param uuid
 	 * @return
 	 */
-	public List<List<Mood>> getProjectMoods(String uuid) throws EmptyResultDataAccessException {
+	public List<List<Mood>> getProjectMoods(String uuid) {
 		if (uuid == null) {
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("Project UUID is null");
 		}
 		return sortProjectMoods(mrim.getProjectMoods(uuid));
 	}
@@ -36,7 +34,7 @@ public class MoodService {
 	 * @param moods
 	 * @return
 	 */
-	public List<List<Mood>> sortProjectMoods(List<Mood> moods) throws EmptyResultDataAccessException {
+	public List<List<Mood>> sortProjectMoods(List<Mood> moods){
 		checkListOk(moods);
 		return browseList(moods);
 	}
@@ -47,7 +45,7 @@ public class MoodService {
 	 * @return
 	 * @throws EmptyResultDataAccessException
 	 */
-	public List<List<Mood>> browseList(List<Mood> moods) throws EmptyResultDataAccessException {
+	public List<List<Mood>> browseList(List<Mood> moods){
 		List<List<Mood>> listList = new ArrayList<List<Mood>>();
 		List<Mood> lm;
 		int numList;
@@ -88,11 +86,11 @@ public class MoodService {
 	 */
 	private boolean checkListOk(List<Mood> moods) {
 		if (moods == null || moods.isEmpty())
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("List is null or empty");
 		return true;
 
 	}
-	
+
 	/**
 	 * save a mood in the DB
 	 * 
@@ -100,18 +98,24 @@ public class MoodService {
 	 * @param json
 	 * @return
 	 */
-	public Mood saveMood(Mood m) throws EmptyResultDataAccessException {
-		try{
+	public Mood saveMood(Mood m) {
+		if (checkMoodOk(m)) {
 			mrim.save(m);
 			return m;
 		}
-		catch(Exception e){
-			throw new EmptyResultDataAccessException(0);
-		}
-		
+		throw new IllegalArgumentException("Error saving the mood");
+
 	}
 
-	
+	/**
+	 * check if all the fields are ok
+	 * @param m
+	 * @return
+	 */
+	private boolean checkMoodOk(Mood m) {
+		return (m.getDate() != null && m.getUuid() != null && m.getUuidProj() != null);
+	}
+
 	/**
 	 * check if the uuid already exist in the DB
 	 * 
@@ -126,5 +130,8 @@ public class MoodService {
 		return false;
 	}
 
+	public Mood updateMood(Mood mood) {		
+		return mrim.update(mood);
+	}
 
 }

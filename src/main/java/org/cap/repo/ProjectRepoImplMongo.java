@@ -1,7 +1,6 @@
 package org.cap.repo;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import org.cap.bean.Project;
@@ -9,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -49,7 +46,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	public void checkProperties(){
 		if(environment.getProperty("mongo.host") == null || environment.getProperty("mongo.port") == null || environment.getProperty("mongo.database") == null){
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("At least one property missing");
 		}
 	}
 
@@ -85,7 +82,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	public Project getObjectByTitle(String title) {
 		if(title == null) {
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("UUID null");
 		}
 		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class);
 	}
@@ -98,7 +95,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 */
 	public Project get(String id) {
 		if(id == null){
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("UUID null");
 		}
 		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class);
 
@@ -106,7 +103,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	
 	public void delete(String uuid) {
 		if(uuid == null){
-			throw new EmptyResultDataAccessException(0);
+			throw new IllegalArgumentException("UUID null");
 		}
 		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class);
 	}

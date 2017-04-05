@@ -148,18 +148,18 @@ public class MailService {
 		String baseLink = environment.getProperty("smtp.baseLink");
 		String uuMood = uuid+"#"+mail+"#"+date;
 		String[] tabDate = new String[5];
-		tabDate[0] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"0&uuidmood="+uuMood;
-		tabDate[1] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"1&uuidmood="+uuMood;
-		tabDate[2] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"2&uuidmood="+uuMood;
-		tabDate[3] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"3&uuidmood="+uuMood;
-		tabDate[4] = baseLink +"?uuid="+ uuid+"&date="+ date+"&mood="+"4&uuidmood="+uuMood;
+		tabDate[0] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
+		tabDate[1] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
+		tabDate[2] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
+		tabDate[3] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
+		tabDate[4] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
 		return tabDate;
 	}
 
 	public boolean checkProperties() {
 		if(environment.getProperty("smtp.baseLink") != null && environment.getProperty("smtp.host") != null && environment.getProperty("smtp.port") != null && environment.getProperty("smtp.address") != null &&environment.getProperty("smtp.password") != null)
 			return true;
-		return false;
+		throw new IllegalArgumentException("At least one property missing");
 	}
 
 }

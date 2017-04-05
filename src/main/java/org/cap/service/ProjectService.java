@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -31,10 +29,10 @@ public class ProjectService {
 	public Project addProject(String title) {
 		// validation
 		if (null == title || title.matches("^[ \t]*$")) {
-			throw new IllegalArgumentException("title ko");
+			throw new IllegalArgumentException("incorrect project title");
 		}
 		if (isTitleAlreadyExists(title)) {
-			throw new IllegalArgumentException("title existant");
+			throw new IllegalArgumentException("title already exist");
 		}
 
 		// sauvegarde
@@ -47,11 +45,11 @@ public class ProjectService {
 
 	public Project addUserToProject(String projectUUID, String email) {
 		if (! isAnEmail(email)) {
-			throw new IllegalArgumentException("email invalid");
+			throw new IllegalArgumentException("invalid email");
 		}
 		Project project = prim.get(projectUUID);
 		if (null == project) {
-			throw new IllegalArgumentException("projet non trouve");
+			throw new IllegalArgumentException("projct not found");
 		}
 
 		if (! project.getMails().contains(email)) {
@@ -74,10 +72,10 @@ public class ProjectService {
 	public Project saveProject(Project project) {
 		// validation
 		if (null == project.getTitle() || project.getTitle().matches("^[ \t]*$")) {
-			throw new IllegalArgumentException("title ko");
+			throw new IllegalArgumentException("incorrect project title");
 		}
 		if (isTitleAlreadyExists(project.getTitle())) {
-			throw new IllegalArgumentException("title existant");
+			throw new IllegalArgumentException("title already exist");
 		}
 
 		// sauvegarde
