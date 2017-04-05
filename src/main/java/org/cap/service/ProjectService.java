@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
@@ -24,7 +25,7 @@ public class ProjectService {
 	@Autowired
 	protected ProjectRepoImplMongo prim;
 	@Autowired
-	protected MailService ms;
+	protected MailService mailService;
 	ObjectMapper mapper = new ObjectMapper();
 
 	public Project addProject(String title) {
@@ -84,6 +85,7 @@ public class ProjectService {
 		return project;
 	}
 
+	@Deprecated
 	public String getNode(String json, String var) {
 		String retrn = null;
 		try {
@@ -108,6 +110,7 @@ public class ProjectService {
 	 * @param jsonInString
 	 * @return
 	 */
+	@Deprecated
 	public boolean validJson(String json) {
 		try {
 			final ObjectMapper mapper = new ObjectMapper();
@@ -118,35 +121,9 @@ public class ProjectService {
 		}
 	}
 
-	/**
-	 * try to add an email to a project document in mongo when POST
-	 * /projects/{uuid}
-	 * 
-	 * @param email
-	 * @param uuid
-	 * @return project
-	 * @throws IOException
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
-	 */
-	public Project addEmail(String json, String uuid)
-			throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
-		String email = getNode(json, "email");
-		Project p = prim.get(uuid);
-		List<String> listMail;
-		if (p != null && email != null && isAnEmail(email)) {
-			listMail = p.getMails();
-			if (!p.getMails().contains(email)) {
-				listMail.add(email);
-				prim.delete(uuid);
-				prim.save(p);
-			}
-			return p;
-		}
-		throw new EmptyResultDataAccessException(0);
-
-	}
-
+	/* pattern simple pour validation d'email */
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+	
 	/**
 	 * check if it seems to be a real email
 	 * 
@@ -154,12 +131,7 @@ public class ProjectService {
 	 * @return
 	 */
 	protected boolean isAnEmail(String email) {
-		// TODO si email null
-		// TODO: plutot utiliser une regex sur stackoverflow qui va vraiment faire les cas de tests :p
-		if (email.split("@").length == 2 && email.length() > 6 && email.length() < 30 && email.contains(".")) {
-			return true;
-		}
-		return false;
+		return VALID_EMAIL_ADDRESS_REGEX.matcher(email).find();
 	}
 
 	/**
@@ -200,15 +172,15 @@ public class ProjectService {
 		Project project = prim.get(uuid);
 		System.out.println(project.getTitle());
 		// TODO: check uuid a faire avant la recuperation - ou ne pas faire car ici nous avons deja le project
-		if (uuid != null && project != null && ms.checkProperties()) {
+		if (project != null && mailService.checkProperties()) {
 			try {
 				final Map<String, Object> props = new HashMap<String, Object>();
 				// TOOD: appeler un chat un chat. ms on ne sait pas a quoi ca correspond : mailService ca mange pas de pain !
-				props.put("date", ms.getDateNowWithDayOfWeek());
-				String date = ms.getDateNow();
+				props.put("date", mailService.getDateNowWithDayOfWeek());
+				String date = mailService.getDateNow();
 				for (String mail : project.getMails()) {
-					props.put("url", ms.generateLinks(uuid, mail, date));
-					ms.sendEmail(props, mail);
+					props.put("url", mailService.generateLinks(uuid, mail, date));
+					mailService.sendEmail(props, mail);
 				}
 			} catch (IOException | TemplateException e) {
 				throw new EmptyResultDataAccessException(0);

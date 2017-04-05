@@ -1,18 +1,23 @@
 package org.cap.controller;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.cap.bean.Mood;
 import org.cap.bean.Project;
 import org.cap.controller.bean.AddProjectInput;
 import org.cap.controller.bean.AddUserToProjectInput;
+import org.cap.controller.bean.ErrorOutput;
 import org.cap.service.MoodService;
 import org.cap.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /**
@@ -50,7 +56,7 @@ public class Projects {
 	 */
 	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Project saveProjects(@RequestBody AddProjectInput project) {
+	public Project addProject(@RequestBody AddProjectInput project) {
 		return pServ.addProject(project.getTitle());
 	}
 
@@ -93,7 +99,6 @@ public class Projects {
 	@ResponseStatus(HttpStatus.OK)
 	public Project addEmail(@PathVariable("uuid") String uuid, @RequestBody AddUserToProjectInput user) {
 		return pServ.addUserToProject(uuid, user.getEmail());
-
 	}
 
 	/**
@@ -137,10 +142,11 @@ public class Projects {
 	 * @param e
 	 * @throws IOException
 	 */
-
-	@ExceptionHandler(EmptyResultDataAccessException.class)
+	@ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class})
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public void handleEmptyResult(Exception e) throws IOException {
+	public void handleEmptyResult(final Exception e, final HttpServletRequest request, Writer writer) throws IOException {
+		ErrorOutput err = new ErrorOutput(e.getMessage());
+		writer.write(new ObjectMapper().writeValueAsString(err));
 	}
 
 }

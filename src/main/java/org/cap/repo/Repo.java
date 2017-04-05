@@ -2,8 +2,6 @@ package org.cap.repo;
 
 import java.util.List;
 
-import org.cap.bean.Project;
-
 /**
  * Interface to implements for basic Database operations
  * @author hledall
