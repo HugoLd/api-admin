@@ -24,69 +24,33 @@ public class Project {
 	private String title;
 	private List<String> mails;
 
-	/**
-	 * Constructor generating UUID
-	 * 
-	 * @param title
-	 */
-	public Project(String title) {
-		this.id = UUID.randomUUID().toString();
-		this.title = title;
-		mails = null;
-	}
-	
-	// <accessors>
-	/**
-	 * 
-	 * @return the id
-	 */
+	public Project() {}
+
 	public String getId() {
 		return id;
 	}
 
-	/**
-	 * 
-	 * @param Id
-	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/**
-	 * 
-	 * @return the title
-	 */
 	public String getTitle() {
 		return title;
 	}
 
-	/**
-	 * 
-	 * @param title
-	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	/**
-	 * 
-	 * @return
-	 */
+
 	public List<String> getMails() {
 		if(mails == null){
 			mails = new ArrayList<String>();
 		}
 		return mails;
 	}
-	/**
-	 * 
-	 * @param mails
-	 */
+
 	public void setMails(List<String> mails) {
 		this.mails = mails;
 	}
-
-	// </accessors>
-
-	
 
 }

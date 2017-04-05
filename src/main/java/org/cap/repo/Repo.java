@@ -2,6 +2,8 @@ package org.cap.repo;
 
 import java.util.List;
 
+import org.cap.bean.Project;
+
 /**
  * Interface to implements for basic Database operations
  * @author hledall
@@ -13,22 +15,26 @@ public interface Repo<T>{
 	 * get all the <T> objects
 	 * @param object
 	 */
-	public List<T> getAllObjects();
+	List<T> getAll();
+
 	/**
 	 * insert a <T> object in the db
 	 * @param object
 	 */
-	public void saveObject(T object);
+	void save(T object);
+
 	/**
 	 * get a <T> object in the db by id
 	 * NEXT SPRINT
 	 */
-	public T getObject(String id);
+	T get(String id);
+
+	// TODO: public void update(Project project) {
+	
 	/**
 	 * delete an object in the db
 	 *
 	 */
-	public void deleteObject(String id);
-
+	void delete(String id);
 
 }

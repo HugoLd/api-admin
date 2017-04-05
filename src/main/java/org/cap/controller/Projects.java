@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.cap.bean.Mood;
 import org.cap.bean.Project;
+import org.cap.controller.bean.AddProjectInput;
+import org.cap.controller.bean.AddUserToProjectInput;
 import org.cap.service.MoodService;
 import org.cap.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,12 +48,33 @@ public class Projects {
 	 * @throws JsonMappingException
 	 * @throws JsonParseException
 	 */
-	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/projects", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Project saveProjects(@RequestBody(required = false) String json)
-			throws JsonParseException, JsonMappingException, IOException {
+	public Project saveProjects(@RequestBody AddProjectInput project) {
+		return pServ.addProject(project.getTitle());
+	}
 
-		return pServ.saveProjects(json);
+	/**
+	 * try to add a project when GET on /projects if request is ok return 201 +
+	 * 
+	 * @return list of projects
+	 */
+	@RequestMapping(value = "/projects", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Project> getProjects() {
+		return pServ.getProjects();
+
+	}
+
+	/**
+	 * 
+	 * @param uuid
+	 * @return project
+	 */
+	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public Project getProject(@PathVariable("uuid") String uuid) {
+		return pServ.getProject(uuid);
 	}
 
 	/**
@@ -65,60 +89,33 @@ public class Projects {
 	 * @throws JsonParseException
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/projects/{uuid}/emails", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Project addEmail(@RequestBody(required = false) String json, @PathVariable("uuid") String uuid)
-			throws EmptyResultDataAccessException, JsonParseException, JsonMappingException, IOException {
-		return pServ.addEmail(json, uuid);
+	public Project addEmail(@PathVariable("uuid") String uuid, @RequestBody AddUserToProjectInput user) {
+		return pServ.addUserToProject(uuid, user.getEmail());
 
 	}
 
-	/**
-	 * try to add a project when GET on /projects if request is ok return 201 +
-	 * 
-	 * @return list of projects
-	 */
-	@RequestMapping(value = "/projects", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	@ResponseStatus(HttpStatus.OK)
-	public List<Project> getProjects() {
-		return pServ.getProjects();
-
-	}
-
-	/**
-	 * 
-	 * @param uuid
-	 * @return project
-	 */
-	@RequestMapping(value = "/projects/{uuid}", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	@ResponseStatus(HttpStatus.OK)
-	public Project getProject(@PathVariable("uuid") String uuid) {
-		return pServ.getProject(uuid);
-
-	}
 	/**
 	 * Mapping for sending mail to all the team
 	 * @param uuid
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/projects/{uuid}/sendMail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void sendMail(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
-
 		pServ.sendMail(uuid);
-
 	}
+
 	/**
 	 * get mood from an user
 	 * @param uuid
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/userMood", method = RequestMethod.POST, produces = "application/json; charset=utf-8" , consumes="application/json; charset=utf-8")
+	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public Mood addMood(@PathVariable("uuid") String uuid,@RequestBody(required = false)Mood mood) throws EmptyResultDataAccessException {
-		System.out.println("passed");
-		//	return mServ.saveMood(uuid , json);
+	public Mood addMood(@PathVariable("uuid") String uuid, @RequestBody Mood mood) throws EmptyResultDataAccessException {
 		return mServ.saveMood(mood);
 	}
 
@@ -128,11 +125,12 @@ public class Projects {
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/projects/{uuid}/moods", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<List<Mood>> getProjectMoods(@PathVariable("uuid") String uuid) throws EmptyResultDataAccessException {
 		return mServ.getProjectMoods(uuid);
 	}
+
 	/**
 	 * to return 400 on error
 	 * 
@@ -144,4 +142,5 @@ public class Projects {
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public void handleEmptyResult(Exception e) throws IOException {
 	}
+
 }

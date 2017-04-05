@@ -102,7 +102,7 @@ public class MoodService {
 	 */
 	public Mood saveMood(Mood m) throws EmptyResultDataAccessException {
 		try{
-			mrim.saveObject(m);
+			mrim.save(m);
 			return m;
 		}
 		catch(Exception e){
@@ -119,7 +119,7 @@ public class MoodService {
 	 * @return
 	 */
 	protected boolean checkUUIDMoodNotExisting(String uuid) {
-		Mood p = mrim.getObject(uuid);
+		Mood p = mrim.get(uuid);
 		if (p == null) {
 			return true;
 		}

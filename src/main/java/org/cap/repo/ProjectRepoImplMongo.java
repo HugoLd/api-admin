@@ -1,6 +1,7 @@
 package org.cap.repo;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import org.cap.bean.Project;
@@ -11,7 +12,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+
 import com.mongodb.MongoClient;
 
 /**
@@ -59,12 +63,18 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * insert project in db
 	 */
 	@Override
-	public void saveObject(Project object) {
-		if(object == null){
-			throw new EmptyResultDataAccessException(0);
-		}
-		mongoTemplate.insert(object, "projects");
+	public void save(Project object) {
+		mongoTemplate.insert(object);
+	}
 
+	public void update(Project project) {
+		mongoTemplate.updateFirst(
+				new Query(Criteria.where("_id").is(project.getId())),
+				new Update()
+					.set("title", project.getTitle())
+					.set("mails",project.getMails()),
+				Project.class
+				);
 	}
 
 	/**
@@ -74,11 +84,10 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * @return
 	 */
 	public Project getObjectByTitle(String title) {
-		if(title == null){
+		if(title == null) {
 			throw new EmptyResultDataAccessException(0);
 		}
-		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class, "projects");
-
+		return mongoTemplate.findOne(new Query(Criteria.where("title").is(title)), Project.class);
 	}
 
 	/**
@@ -87,29 +96,29 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * @param title
 	 * @return project
 	 */
-	public Project getObject(String id) {
+	public Project get(String id) {
 		if(id == null){
 			throw new EmptyResultDataAccessException(0);
 		}
-		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class, "projects");
+		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class);
 
 	}
 	
-	public void deleteObject(String uuid) {
+	public void delete(String uuid) {
 		if(uuid == null){
 			throw new EmptyResultDataAccessException(0);
 		}
-		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class,"projects");
+		mongoTemplate.remove(new Query(Criteria.where("_id").is(uuid)), Project.class);
 	}
 	/**
 	 * get all the projects in the base ( format _id , title)
 	 * @return
 	 */
-	public List<Project> getAllObjects() {	
+	public List<Project> getAll() {	
 		Query q = new Query();
 		q.fields().include("_id");
 		q.fields().include("title");		
-		return mongoTemplate.find(q,Project.class, "projects");
+		return mongoTemplate.find(q,Project.class);
 	}
 	
 	

@@ -13,22 +13,7 @@ public class ProjectTest extends TestCase {
 	@Before
 	protected void setUp() throws Exception {
 		title = "Management";
-		p = new Project(title);
-		super.setUp();
-
-	}
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
-	@Test
-	public void testConstructor_shouldBeEqualToTitle_whenCall() {
-		assertEquals(p.getTitle(), title);
-
-	}
-	@Test
-	public void testConstructor_shouldntBeNull_whenCall() {
-		assertTrue(p.getId() != null);
+		p = new Project();
 	}
 	
 	@Test
@@ -57,6 +42,5 @@ public class ProjectTest extends TestCase {
 		p.getMails().add(mail);
 		assertTrue(p.getMails().contains(mail));
 	}
-	
 
 }

@@ -34,45 +34,45 @@ public class ProjectServiceTest extends TestCase {
 	@Mock
 	MailService ms;
 
+	private static final Project A_PROJECT = new Project();
+	private static final String A_PROJECT_ID = "xxx-yyy";
+	private static final String A_PROJECT_NAME = "yo";
+	
 	@Before
 	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
+		A_PROJECT.setId(A_PROJECT_ID);
+		A_PROJECT.setTitle(A_PROJECT_NAME);
 	}
 
 	@Test
 	public void testIsAnEmail_shouldBeTrue_whenEmailIsOK() {
-		assertEquals(pServ.IsAnEmail("hello@gmail.com"), true);
+		assertEquals(pServ.isAnEmail("hello@gmail.com"), true);
 	}
 
 	@Test
 	public void testIsAnEmail_shouldBeFalse_whenEmailTooShort() {
-		assertEquals(pServ.IsAnEmail("h@m.f"), false);
+		assertEquals(pServ.isAnEmail("h@m.f"), false);
 	}
 
 	@Test
 	public void testIsAnEmail_shouldBeFalse_whenEmailTooLong() {
-		assertEquals(pServ.IsAnEmail("hellohellohellohellohello@emailadressprovier.unitedstates"), false);
+		assertEquals(pServ.isAnEmail("hellohellohellohellohello@emailadressprovier.unitedstates"), false);
 	}
 
 	@Test
 	public void testIsAnEmail_shouldBeFalse_whenEmailHasTwoAt() {
-		assertEquals(pServ.IsAnEmail("hello@gm@ail.com"), false);
+		assertEquals(pServ.isAnEmail("hello@gm@ail.com"), false);
 	}
 
 	@Test
 	public void testIsAnEmail_shouldBeFalse_whenEmailContainsNoPoint() {
-		assertEquals(pServ.IsAnEmail("hello@gmailcom"), false);
+		assertEquals(pServ.isAnEmail("hello@gmailcom"), false);
 	}
 
 	@Test
 	public void testCheckTitleNotExisting_shouldBeFalse_whenAlreadyExist() {
-		when(prim.getObjectByTitle("Gestion")).thenReturn(new Project("Gestion"));
-		assertEquals(pServ.checkTitleNotExisting("Gestion"), false);
+		when(prim.getObjectByTitle("Gestion")).thenReturn(A_PROJECT);
+		assertEquals(pServ.checkTitleNotExisting(A_PROJECT_NAME), false);
 		verify(prim).getObjectByTitle("Gestion");
 	}
 
@@ -84,70 +84,57 @@ public class ProjectServiceTest extends TestCase {
 	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
-	public void testSaveProject_shouldBeAnERDAEException_whenJsonNull()
-			throws JsonParseException, JsonMappingException, IOException {
+	public void testSaveProject_shouldBeAnERDAEException_whenJsonNull() {
 
-		pServ.saveProjects(null);
-
-	}
-
-	@Test(expected = EmptyResultDataAccessException.class)
-	public void testSaveProject_shouldBeAnERDAEException_whenTitleNull()
-			throws JsonParseException, JsonMappingException, IOException {
-
-		pServ.saveProjects("{\"title\":null}");
+		pServ.saveProject(null);
 
 	}
 
-	@Test(expected = EmptyResultDataAccessException.class)
-	public void testSaveProject_shouldBeAnERDAEException_whenTitleAlreadyExist()
-			throws JsonParseException, JsonMappingException, IOException {
-		when(prim.getObjectByTitle("hello")).thenReturn(new Project("hello"));
-		pServ.saveProjects("{\"title\":\"hello\"}");
-		verify(prim).getObjectByTitle("hello");
+	@Test(expected = IllegalArgumentException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleNull() {
 
+		pServ.saveProject(new Project());
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleAlreadyExist() {
+		when(prim.getObjectByTitle(A_PROJECT_NAME)).thenReturn(new Project());
+		pServ.saveProject(A_PROJECT);
 	}
 
 	@Test
-	public void testSaveProject_shouldBeAnERDAEException_whenTitleNotExist()
-			throws JsonParseException, JsonMappingException, IOException {
-		when(prim.getObjectByTitle("hello")).thenReturn(null);
-		pServ.saveProjects("{\"title\":\"hello\"}");
-		verify(prim).getObjectByTitle("hello");
-
+	public void testSaveProject_shouldBeAnERDAEException_whenTitleNotExist() {
+		when(prim.getObjectByTitle(A_PROJECT_NAME)).thenReturn(null);
+		pServ.saveProject(A_PROJECT);
+		verify(prim).getObjectByTitle(A_PROJECT_NAME);
 	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
-	public void testAddEmail_shouldBeAnERDAEException_whenProjectDoesntExist()
-			throws JsonParseException, JsonMappingException, IOException {
+	public void testAddEmail_shouldBeAnERDAEException_whenProjectDoesntExist() {
 		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
-		when(prim.getObject(uuid)).thenReturn(null);
+		when(prim.get(uuid)).thenReturn(null);
 		pServ.addEmail("{\"email\":\"hello@gmail.com\"}", uuid);
 
-		verify(prim).getObject(uuid);
+		verify(prim).get(uuid);
 	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void testAddEmail_shouldBeAnERDAEException_whenEmailIsNull()
 			throws JsonParseException, JsonMappingException, IOException {
-		Project proj = new Project("hello");
-		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
-		proj.setId(uuid);
-		when(prim.getObject(uuid)).thenReturn(proj);
+		when(prim.get(A_PROJECT_ID)).thenReturn(A_PROJECT);
 		pServ.addEmail(null, uuid);
 
-		verify(prim).getObject(uuid);
+		verify(prim).get(uuid);
 	}
 
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void testAddEmail_shouldBeAnERDAEException_whenEmailIncorrect()
 			throws JsonParseException, JsonMappingException, IOException {
-		Project proj = new Project("hello");
-		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
-		proj.setId(uuid);
-		when(prim.getObject(uuid)).thenReturn(proj);
+		A_PROJECT.setId(uuid);
+		when(prim.get(uuid)).thenReturn(A_PROJECT);
 		pServ.addEmail("{\"email\":\"a@a.a\"}", uuid);
-		verify(prim).getObject(uuid);
+		verify(prim).get(uuid);
 	}
 
 	@Test
@@ -155,9 +142,9 @@ public class ProjectServiceTest extends TestCase {
 		Project proj = new Project("hello");
 		String uuid = "202d4355-6a2e-4269-8ca9-49095acfe210";
 		proj.setId(uuid);
-		when(prim.getObject(uuid)).thenReturn(proj);
+		when(prim.get(uuid)).thenReturn(proj);
 		pServ.addEmail("{\"email\":\"hlld@hotmail.fr\"}", uuid);
-		verify(prim).getObject(uuid);
+		verify(prim).get(uuid);
 	}
 
 	@Test
@@ -169,34 +156,34 @@ public class ProjectServiceTest extends TestCase {
 		List<String> list = new ArrayList<String>();
 		list.add("hlld@hotmail.fr");
 		proj.setMails(list);
-		when(prim.getObject(uuid)).thenReturn(proj);
+		when(prim.get(uuid)).thenReturn(proj);
 		pServ.addEmail("{\"email\":\"hlld@hotmail.fr\"}", uuid);
-		verify(prim).getObject(uuid);
+		verify(prim).get(uuid);
 	}
 
 	@Test
 	public void testGetProjects_shouldNotBeNull_whenProjectIn() {
 		List<Project> lp = new ArrayList<Project>();
 		lp.add(new Project("test"));
-		when(prim.getAllObjects()).thenReturn(lp);
+		when(prim.getAll()).thenReturn(lp);
 		assertTrue(pServ.getProjects() != null);
-		verify(prim).getAllObjects();
+		verify(prim).getAll();
 	}
 
 	@Test
 	public void testGetProjects_shouldBeNull_whenNoProjectIn() {
-		when(prim.getAllObjects()).thenReturn(null);
+		when(prim.getAll()).thenReturn(null);
 		assertTrue(pServ.getProjects() == null);
-		verify(prim).getAllObjects();
+		verify(prim).getAll();
 	}
 
 	@Test
 	public void testGetProject_shouldNotBeNull_whenProjectExist() {
 		Project proj = new Project("test");
 		proj.setId("202d4355-6a2e-4269-8ca9-49095acfe210");
-		when(prim.getObject("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(proj);
+		when(prim.get("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(proj);
 		assertTrue(pServ.getProject("202d4355-6a2e-4269-8ca9-49095acfe210") != null);
-		verify(prim).getObject("202d4355-6a2e-4269-8ca9-49095acfe210");
+		verify(prim).get("202d4355-6a2e-4269-8ca9-49095acfe210");
 	}
 	
 	@Test
@@ -236,9 +223,9 @@ public class ProjectServiceTest extends TestCase {
 	@Test(expected = EmptyResultDataAccessException.class)
 	public void testsendMail_shouldBeAnERDAEException_whenProjectNull() {		
 		
-		when(prim.getObject("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(null);
+		when(prim.get("202d4355-6a2e-4269-8ca9-49095acfe210")).thenReturn(null);
 		pServ.sendMail("202d4355-6a2e-4269-8ca9-49095acfe210");
-		verify(prim).getObject("202d4355-6a2e-4269-8ca9-49095acfe210");
+		verify(prim).get("202d4355-6a2e-4269-8ca9-49095acfe210");
 	}
 
 	@Test
@@ -248,11 +235,11 @@ public class ProjectServiceTest extends TestCase {
 		proj.setId(uuid);
 		proj.getMails().add("azerty@poiuy.com");
 		proj.getMails().add("hellotest@mails.com");
-		when(prim.getObject(uuid)).thenReturn(proj);
+		when(prim.get(uuid)).thenReturn(proj);
 		when(ms.checkProperties()).thenReturn(true);
 		pServ.sendMail("202d4355-6a2e-4269-8ca9-49095acfe210");		
 		pServ.sendMail(uuid);
-		verify(prim,atLeast(1)).getObject(uuid);
+		verify(prim,atLeast(1)).get(uuid);
 		verify(ms,atLeast(1)).checkProperties();
 	}
 }

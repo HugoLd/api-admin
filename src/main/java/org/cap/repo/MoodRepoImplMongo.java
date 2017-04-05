@@ -47,7 +47,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	 * get all the moods
 	 */
 	@Override
-	public List<Mood> getAllObjects() {
+	public List<Mood> getAll() {
 		Query q = new Query();		
 		return mongoTemplate.find(q,Mood.class, "moods");
 	}
@@ -67,7 +67,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	 * save a mood
 	 */
 	@Override
-	public void saveObject(Mood object) {
+	public void save(Mood object) {
 		if (object == null) {
 			throw new EmptyResultDataAccessException(0);
 		}
@@ -75,7 +75,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	}
 
 	@Override
-	public Mood getObject(String id) {
+	public Mood get(String id) {
 		if (id == null) {
 			throw new EmptyResultDataAccessException(0);
 		}
@@ -84,7 +84,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	}
 
 	@Override
-	public void deleteObject(String id) {
+	public void delete(String id) {
 
 		if (id == null) {
 			throw new EmptyResultDataAccessException(0);
