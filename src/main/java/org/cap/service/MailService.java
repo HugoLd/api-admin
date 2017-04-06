@@ -146,7 +146,7 @@ public class MailService {
 	 */
 	public String[] generateLinks(String uuid, String mail, String date) {
 		String baseLink = environment.getProperty("smtp.baseLink");
-		String uuMood = uuid+"#"+mail+"#"+date;
+		String uuMood = uuid+"+"+mail+"+"+date;
 		String[] tabDate = new String[5];
 		tabDate[0] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
 		tabDate[1] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";

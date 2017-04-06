@@ -1,6 +1,6 @@
 (function() {
-	var defaultMood = window.location.search.substring(1).split("&")[3].substring(5);
-	$("input[name=emotion]").setChecked(defaultMood);	
+	var defaultMood = window.location.search.substring(1).split("&")[3].substring(5);	
+	$("input[name=emotion][value=" + defaultMood + "]").prop('checked', true);
 })();
 
 
@@ -9,29 +9,28 @@ $('#moodSelector').submit(function (event) {
 	event.preventDefault();
 
 	var args = window.location.search.substring(1).split("&");
-	var baseLink = "http://localhost:8080/api-admin/projects";
-
 	var projectUUID = args[0].substring(9);
+	var url = "http://localhost:8080/api-admin/projects/"+projectUUID+"/moods";
 	var moodUUID = args[1].substring(5);
 	var moodDate = args[2].substring(5);
-	
 	var data = {
-		"uuid": projectUUID,
-		"uuidProj": args[1],
+		"uuid": moodUUID,
 		"mood": $("input[name=emotion]:checked").val(),
-		"comment": $("input[name=comment]").val(),
-		"date":args[2]
+		"comment": $("textarea[name=comment]").val(),
+		"date":moodDate
 	};
-
+	console.log(data);
+	
 	$.ajax({
-		url: baseLink + "/" + projectUUID + "/userMood",
+		url: url,
 		type: "POST",
-		data: data,
+		data: JSON.stringify(data),
 		contentType: "application/json",
+		dataType: 'json'
 	}).done(function(){
-		//todo trqiter le retour du done
-	}).fail(function(){
-		//todo trqiter le retour du fail
+		alert("Thanks for voting =) \n Please come back soon !")
+	}).fail(function(xhr, status, error){
+		alert("Error , \n status code ="+status+"\n Error message : \n"+error);
 	});
 
 });
