@@ -1,9 +1,9 @@
 package org.cap.controller;
 
 import org.cap.repo.ProjectRepoImplMongo;
+import org.cap.service.ProjectService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +17,8 @@ public class ControllerProjectsTest extends TestCase {
 	public Projects ps;
 	@Mock
 	ProjectRepoImplMongo prim;
+	@Mock
+	ProjectService pServ;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -26,9 +28,6 @@ public class ControllerProjectsTest extends TestCase {
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}
-	@Test
-	public void everTrue() throws Exception{
-		assertTrue(true);
-	}
+	
 	
 }

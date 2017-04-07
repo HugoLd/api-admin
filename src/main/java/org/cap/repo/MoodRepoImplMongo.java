@@ -49,7 +49,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	@Override
 	public List<Mood> getAll() {
 		Query q = new Query();
-		return mongoTemplate.find(q, Mood.class, "moods");
+		return mongoTemplate.find(q, Mood.class);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 		q.fields().include("mood");
 		q.fields().include("date");
 		q.fields().include("comment");
-		return mongoTemplate.find(q, Mood.class, "moods");
+		return mongoTemplate.find(q, Mood.class);
 	}
 
 	/**

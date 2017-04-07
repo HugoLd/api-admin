@@ -1,7 +1,6 @@
 package org.cap.bean;
 
 import java.util.UUID;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;
@@ -17,7 +16,7 @@ public class ProjectTest extends TestCase {
 	}
 	
 	@Test
-	public void testSetTitle_shouldBeEqualTothe_whenSet() {
+	public void testSetTitle_shouldBeEqualTotheTitle_whenSet() {
 		String tit = "testSetTitle";
 		p.setTitle(tit);
 		assertEquals(p.getTitle(), tit);

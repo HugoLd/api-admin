@@ -10,11 +10,9 @@ import java.util.regex.Pattern;
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import freemarker.template.TemplateException;
 
@@ -44,33 +42,34 @@ public class ProjectService {
 	}
 
 	public Project addUserToProject(String projectUUID, String email) {
-		if (! isAnEmail(email)) {
+		if (!isAnEmail(email)) {
 			throw new IllegalArgumentException("invalid email");
 		}
 		Project project = prim.get(projectUUID);
 		if (null == project) {
-			throw new IllegalArgumentException("projct not found");
+			throw new IllegalArgumentException("project not found");
 		}
 
-		if (! project.getMails().contains(email)) {
+		if (!project.getMails().contains(email)) {
 			project.getMails().add(email);
 			prim.update(project);
-			// on pourrait imaginer utilise le $push de mongo plutot que de reupdate tout le client
 		}
 		return project;
 	}
 
-	
 	/**
 	 * try to add a project when POST on /projects if request is ok return 201 +
 	 * Project Json if not ok return 400
 	 * 
 	 * @param title
 	 * @return
-	 * @throws IllegalArgumentException si param KO
+	 * @throws IllegalArgumentException
+	 *             si param KO
 	 */
 	public Project saveProject(Project project) {
-		// validation
+		if (null == project) {
+			throw new IllegalArgumentException("incorrect project title");
+		}
 		if (null == project.getTitle() || project.getTitle().matches("^[ \t]*$")) {
 			throw new IllegalArgumentException("incorrect project title");
 		}
@@ -83,45 +82,9 @@ public class ProjectService {
 		return project;
 	}
 
-	@Deprecated
-	public String getNode(String json, String var) {
-		String retrn = null;
-		try {
-			if (json != null && validJson(json)) {
-				ObjectNode node = mapper.readValue(json, ObjectNode.class);
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
 
-				if (node.get(var) != null) {
-					retrn = node.get(var).textValue();
-					node.remove(var);
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return retrn;
-	}
-
-	/**
-	 * validate a json
-	 * 
-	 * @param jsonInString
-	 * @return
-	 */
-	@Deprecated
-	public boolean validJson(String json) {
-		try {
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.readTree(json);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
-	/* pattern simple pour validation d'email */
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-	
 	/**
 	 * check if it seems to be a real email
 	 * 
@@ -165,27 +128,26 @@ public class ProjectService {
 	 * send all the mail in the project with given uuid
 	 * 
 	 * @param uuid
+	 * @throws TemplateException 
+	 * @throws IOException 
 	 */
-	public void sendMail(String uuid) {
+	public void sendMail(String uuid) throws IOException, TemplateException {
 		Project project = prim.get(uuid);
-		System.out.println(project.getTitle());
-		// TODO: check uuid a faire avant la recuperation - ou ne pas faire car ici nous avons deja le project
-		if (project != null && mailService.checkProperties()) {
-			try {
-				final Map<String, Object> props = new HashMap<String, Object>();
-				// TOOD: appeler un chat un chat. ms on ne sait pas a quoi ca correspond : mailService ca mange pas de pain !
-				props.put("date", mailService.getDateNowWithDayOfWeek());
-				String date = mailService.getDateNow();
-				for (String mail : project.getMails()) {
-					props.put("url", mailService.generateLinks(uuid, mail, date));
-					mailService.sendEmail(props, mail);
-				}
-			} catch (IOException | TemplateException e) {
-				throw new EmptyResultDataAccessException(0);
-			}
-		} else {
-			throw new EmptyResultDataAccessException(0);
+		if (project == null) {
+			throw new IllegalArgumentException("UUID or project null");
 		}
+		if (!mailService.checkProperties()) {
+			throw new IllegalArgumentException("Bad properties");
+		}
+
+		final Map<String, Object> props = new HashMap<String, Object>();
+		props.put("date", mailService.getDateNowWithDayOfWeek());
+		String date = mailService.getDateNow();
+		for (String mail : project.getMails()) {
+			props.put("url", mailService.generateLinks(uuid, mail, date));
+			mailService.sendEmail(props, mail);
+		}
+
 	}
 
 }

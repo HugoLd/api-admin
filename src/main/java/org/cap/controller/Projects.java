@@ -31,6 +31,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import freemarker.template.TemplateException;
+
 /**
  * Controller on /projects call
  * 
@@ -105,11 +107,13 @@ public class Projects {
 	 * Mapping for sending mail to all the team
 	 * 
 	 * @param uuid
+	 * @throws TemplateException 
+	 * @throws IOException 
 	 * @throws EmptyResultDataAccessException
 	 */
 	@RequestMapping(value = "/projects/{uuidProj}/sendMail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void sendMail(@PathVariable("uuidProj") String uuid) {
+	public void sendMail(@PathVariable("uuidProj") String uuid) throws IOException, TemplateException {
 		pServ.sendMail(uuid);
 	}
 

@@ -100,7 +100,9 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		return mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Project.class);
 
 	}
-	
+	/**
+	 * delete a project
+	 */
 	public void delete(String uuid) {
 		if(uuid == null){
 			throw new IllegalArgumentException("UUID null");

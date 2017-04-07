@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Map;
 
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 @PropertySource("classpath:/mail.properties")
 public class MailService {
 	@Autowired
-	private Environment environment; // getting environment for properties
+	Environment environment; // getting environment for properties
 	JavaMailSender mailSender;
 	@Autowired
 	Configuration freemarkerConfiguration;
@@ -146,13 +147,13 @@ public class MailService {
 	 */
 	public String[] generateLinks(String uuid, String mail, String date) {
 		String baseLink = environment.getProperty("smtp.baseLink");
-		String uuMood = uuid+"+"+mail+"+"+date;
+		String uuMood = UUID.nameUUIDFromBytes((uuid+"+"+mail+"+"+date).getBytes()).toString();
 		String[] tabDate = new String[5];
+		tabDate[4] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"4";
+		tabDate[3] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"3";
+		tabDate[2] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"2";
+		tabDate[1] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"1";
 		tabDate[0] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
-		tabDate[1] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
-		tabDate[2] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
-		tabDate[3] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
-		tabDate[4] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
 		return tabDate;
 	}
 
