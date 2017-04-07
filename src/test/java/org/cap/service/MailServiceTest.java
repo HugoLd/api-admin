@@ -24,6 +24,8 @@ public class MailServiceTest extends TestCase {
 	MailService mailService;
 	@Mock
 	Environment env;
+	@Mock
+	freemarker.template.Configuration freemarkerConfiguration;
 	public static final String AN_EMAIL = "hlld@hotmail.fr";
 
 	@Before
@@ -79,7 +81,7 @@ public class MailServiceTest extends TestCase {
 		verify(env).getProperty("smtp.address");
 	}
 	@Test
-	public void testinitMailSender_souldNotBeNull_WhenCalled(){
+	public void testInitMailSender_souldNotBeNull_WhenCalled(){
 		when(env.getProperty("smtp.host")).thenReturn("host");
 		when(env.getProperty("smtp.port")).thenReturn("587");
 		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
@@ -90,6 +92,8 @@ public class MailServiceTest extends TestCase {
 		verify(env).getProperty("smtp.address");
 		verify(env).getProperty("smtp.password");
 	}
+	
+	
 	
 	
 	
