@@ -63,7 +63,7 @@ public class Projects {
 	}
 
 	/**
-	 * try to add a project when GET on /projects if request is ok return 201 +
+	 * 
 	 * 
 	 * @return list of projects
 	 */
@@ -71,6 +71,16 @@ public class Projects {
 	@ResponseStatus(HttpStatus.OK)
 	public List<Project> getProjects() {
 		return pServ.getProjects();
+
+	}
+	/**
+	 *  
+	 * @return complete list of projects
+	 */
+	@RequestMapping(value = "/allProjects", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Project> getAllProjects() {
+		return pServ.getAllProjects();
 
 	}
 
@@ -117,6 +127,19 @@ public class Projects {
 		pServ.sendMail(uuid);
 	}
 
+	/**
+	 * Mapping for sending mail to all the team
+	 * 
+	 * @param uuid
+	 * @throws TemplateException 
+	 * @throws IOException 
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/sendMail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void sendMailAll() throws IOException, TemplateException {
+		pServ.sendMailAll();
+	}
 	/**
 	 * get mood from an user
 	 * 

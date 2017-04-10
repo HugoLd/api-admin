@@ -26,7 +26,7 @@
 		if (data.length != 0) {			
 			createTable();
 			addHeads();		
-			eachDays(data);
+			eachDaysMoods(data);
 			
 		} else {
 			var noMoods = document.createElement("p");
@@ -37,12 +37,13 @@
 	});
 })();
 
+
 /**
- * Process getting data for each days
+ * getting data for each days
  * @param data
  * @returns
  */
-function eachDays(data){	
+function eachDaysMoods(data){	
 	var values = [0,0,0,0,0]
 	for (var i = 0; i < data.length; i++) {
 		var listList=[[],[],[],[],[]];
@@ -54,15 +55,8 @@ function eachDays(data){
 			
 			listList[data[i][y].mood].push(createImg(data[i],y));
 			
-		}
-		for(var v = 0;v<5;v++){
-			values[v] += listList[v].length;
-		}
-		
+		}		
 		browseLists(listList,i);
-	}
-	for(var v = 0;v<5;v++){
-		console.log(values[v]);
 	}
 }
 /**
@@ -147,3 +141,43 @@ function createImg(data,index){
 	return imgMood;
 	
 }
+
+/**
+ * global method for adding moods count
+ */
+(function() {
+	var uuid = window.location.search.substring(1).split("&")[0].substring(5);
+	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
+	$.get(url).done(function(data) {
+		if (data.length != 0) {			
+			eachDaysCount(data);			
+		}
+	});
+})();
+/**
+ * get data for each days
+ * @param data
+ * @returns
+ */
+function eachDaysCount(data){	
+	var values = [0,0,0,0,0]
+	for (var i = 0; i < data.length; i++) {
+		var listList=[[],[],[],[],[]];
+		for (var y = 0; y < data[i].length; y++) {
+			values[data[i][y].mood] ++;			
+		}
+		browseLists(listList,i);
+	}
+	for(var v = 4;v>=0;v--){
+		createDiv(values[v],v);
+		console.log(values[v]);
+	}
+}
+function createDiv(value ,index){
+	var clone = document.getElementById("countDuplicate").cloneNode(true);
+	clone.setAttribute("id","count"+index);
+	clone.appendChild(document.createTextNode(value))
+	document.getElementById("count").appendChild(clone);
+}
+
+

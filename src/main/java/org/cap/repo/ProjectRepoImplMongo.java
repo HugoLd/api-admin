@@ -119,6 +119,13 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		q.fields().include("title");		
 		return mongoTemplate.find(q,Project.class);
 	}
+	public List<Project> getAllWithMails() {	
+		Query q = new Query();
+		q.fields().include("_id");
+		q.fields().include("title");	
+		q.fields().include("mails");
+		return mongoTemplate.find(q,Project.class);
+	}
 	
 	
 

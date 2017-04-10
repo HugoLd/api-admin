@@ -114,6 +114,15 @@ public class ProjectService {
 		return prim.getAll();
 
 	}
+	/**
+	 * try to add a project when GET on /projects if request is ok return 201 +
+	 * 
+	 * @return list of projects
+	 */
+	public List<Project> getAllProjects() {
+		return prim.getAllWithMails();
+
+	}
 
 	/**
 	 * @param uuid
@@ -145,9 +154,23 @@ public class ProjectService {
 		String date = mailService.getDateNow();
 		for (String mail : project.getMails()) {
 			props.put("url", mailService.generateLinks(uuid, mail, date));
+			props.put("projectName", project.getTitle());
 			mailService.sendEmail(props, mail);
 		}
 
+	}
+	/**
+	 * send the mail to everyone
+	 * 
+	 * @param uuid
+	 * @throws TemplateException 
+	 * @throws IOException 
+	 */
+	public void sendMailAll() throws IOException, TemplateException {
+		List<Project> listProj = prim.getAll();
+		for(Project proj : listProj){			
+			sendMail(proj.getId());
+		}
 	}
 
 }

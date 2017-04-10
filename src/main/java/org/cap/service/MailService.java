@@ -91,17 +91,20 @@ public class MailService {
 	 * initialize the sender
 	 * 
 	 * @return
+	 * @throws InterruptedException 
 	 */
 	public JavaMailSender initMailSender() {
 		JavaMailSenderImpl jms = new JavaMailSenderImpl();
 		jms.setHost(environment.getProperty("smtp.host"));
-		jms.setPort(Integer.parseInt(environment.getProperty("smtp.port")));
-		jms.setUsername(environment.getProperty("smtp.address"));
-		jms.setPassword(environment.getProperty("smtp.password"));
-
+		jms.setPort(Integer.parseInt(environment.getProperty("smtp.port")));		
+		if (Boolean.parseBoolean(environment.getProperty("smtp.auth"))) {
+			
+			jms.setUsername(environment.getProperty("smtp.address"));
+			jms.setPassword(environment.getProperty("smtp.password"));
+		}
 		Properties props = new Properties();
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.auth", "\""+environment.getProperty("smtp.auth")+"\"");
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.debug", "true");
 		jms.setJavaMailProperties(props);
@@ -126,7 +129,7 @@ public class MailService {
 		SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd/MM/yyyy");
 		return formatter.format(date);
 	}
-	
+
 	/**
 	 * 
 	 * @return the today's date
@@ -141,24 +144,26 @@ public class MailService {
 	 * generate unique links
 	 * 
 	 * @param p
-	 * @param mail 
-	 * @param date 
+	 * @param mail
+	 * @param date
 	 * @return
 	 */
 	public String[] generateLinks(String uuid, String mail, String date) {
 		String baseLink = environment.getProperty("smtp.baseLink");
-		String uuMood = UUID.nameUUIDFromBytes((uuid+"+"+mail+"+"+date).getBytes()).toString();
+		String uuMood = UUID.nameUUIDFromBytes((uuid + "+" + mail + "+" + date).getBytes()).toString();
 		String[] tabDate = new String[5];
-		tabDate[4] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"4";
-		tabDate[3] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"3";
-		tabDate[2] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"2";
-		tabDate[1] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"1";
-		tabDate[0] = baseLink +"?uuidProj="+ uuid+"&uuid="+uuMood+"&date="+ date+"&mood="+"0";
+		tabDate[4] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "4";
+		tabDate[3] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "3";
+		tabDate[2] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "2";
+		tabDate[1] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "1";
+		tabDate[0] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "0";
 		return tabDate;
 	}
 
 	public boolean checkProperties() {
-		if(environment.getProperty("smtp.baseLink") != null && environment.getProperty("smtp.host") != null && environment.getProperty("smtp.port") != null && environment.getProperty("smtp.address") != null &&environment.getProperty("smtp.password") != null)
+		if (environment.getProperty("smtp.baseLink") != null && environment.getProperty("smtp.host") != null
+				&& environment.getProperty("smtp.port") != null && environment.getProperty("smtp.address") != null
+				&& environment.getProperty("smtp.password") != null)
 			return true;
 		throw new IllegalArgumentException("At least one property missing");
 	}
