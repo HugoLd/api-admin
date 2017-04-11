@@ -6,24 +6,22 @@
 	width: 48%;
 	text-align: center;
 	border: 2px solid #0097E5;
-	
 	display:inline-block;
 	height:95%;
 	padding:2px;
 	
 }
 .form-comment #proj {
-	width: 48%;
+	width: 66%;
 	text-align: left;
 	border: 2px solid #0097E5;
-	
 	display:inline-block;
 	height:95%;
 	padding:2px;
 	
 }
 .form-comment #mails {
-	width: 48%;
+	width:30%;
 	text-align: left;
 	border: 2px solid #0097E5;
 	float:right;
@@ -244,7 +242,30 @@ td img{
 	border-left-style: none;
 	color: #fff;
 }
-
+.table input[type="button"] {
+	margin:3px;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background: #0097E5;
+	border-bottom: 2px solid #0187CD;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+	color: #fff;
+}
+.table input[type="button"]:nth-child(3) {
+	float:right;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background: #ED1C24;
+	border-bottom: 2px solid #C91C24;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+	color: #fff;
+}
 .form-comment input[type="submit"]:hover {
 	background: #0187CD;
 }

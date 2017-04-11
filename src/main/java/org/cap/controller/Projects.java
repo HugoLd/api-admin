@@ -154,6 +154,33 @@ public class Projects {
 		Mood moodToSave = new Mood(mood.getUuid(), uuidProj, mood.getMood(), mood.getComment(), mood.getDate());
 		return mServ.saveMood(moodToSave);
 	}
+	
+	/**
+	 * delete a project from the DB
+	 * 
+	 * @param uuid
+	 * @param json
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/{uuidProj}/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteProject(@PathVariable("uuidProj") String uuidProj) {	
+		pServ.deleteProj(uuidProj);
+	}
+	
+	
+	/**
+	 * get mood from an user
+	 * 
+	 * @param uuid
+	 * @param json
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/{uuidProj}/deleteUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteUser(@PathVariable("uuidProj") String uuidProj, @RequestBody AddUserToProjectInput user) {
+		pServ.deleteUser(user.getEmail() ,uuidProj);
+	}
 
 	/**
 	 * get mood from an user

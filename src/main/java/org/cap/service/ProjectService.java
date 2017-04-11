@@ -173,4 +173,15 @@ public class ProjectService {
 		}
 	}
 
+	public Object deleteProj(String uuidProj) {
+		prim.delete(uuidProj);
+		return null;
+	}
+
+	public Object deleteUser(String email, String uuidProj) {
+		prim.deleteUser(email,uuidProj);
+		return null;
+	}
+
+
 }

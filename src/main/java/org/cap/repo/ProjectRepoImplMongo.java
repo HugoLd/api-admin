@@ -126,6 +126,11 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		q.fields().include("mails");
 		return mongoTemplate.find(q,Project.class);
 	}
+	public void deleteUser(String email, String uuidProj) {
+		Project proj = get(uuidProj);
+		proj.getMails().remove(email);
+		update(proj);
+	}
 	
 	
 
