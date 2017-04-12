@@ -1,74 +1,121 @@
-
+/*
+ * when document is ready init table project
+ */
 $(document).ready(function() {
 	$.get("http://localhost:8080/api-admin/projects").done(function(data) {
 		initTableProject();
-		var table = $('#projects').DataTable({
-			"data" : data,
-			"columns" : [ {
-				"data" : "id"
-			}, {
-				"data" : "title"
-			} ]
-		});
-		
-		$('#projects tbody').on('click', 'tr', function() {
-				document.getElementById("ProjectId").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
-				initMails($(this).children("td")[0].childNodes[0].nodeValue);
-				if ( $(this).hasClass('selected') ) {			    	
-			        $(this).removeClass('selected');
-			    }
-			    else {			    	
-			        table.$('tr.selected').removeClass('selected');
-			        $(this).addClass('selected');
-			    }
-		});
-		
+		initDataTableProject(data);
 	});
 });
 
 
+/*
+ * initialize a datatable object for project list
+ */
+function initDataTableProject(data){
+	var table =  $('#projects').DataTable({
+		"data" : data,
+		"initComplete" : function(){
+			setOnClickListenerProject(this);
+		} ,
+		"columns" : [ {
+			"data" : "id"
+		}, {
+			"data" : "title"
+		} ]
+	});
+	
+}
 
 
+/*
+ * Set the row onClick listener for project table
+ */
+function setOnClickListenerProject(table){
+	$('#projects tbody').on('click', 'tr', function() {
+		document.getElementById("ProjectId").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
+		initMails($(this).children("td")[0].childNodes[0].nodeValue);
+		if ( $(this).hasClass('selected') ) {			    	
+	        $(this).removeClass('selected');
+	    }
+	    else {			    	
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	    }
+});
+}
+
+/*
+ * init table mail 
+ */
 function initMails(id) {
 	$.get("http://localhost:8080/api-admin/projects/" + id).done(function(data) {		
-		var newData;		
-		if(null != data.mails){
-			newData = [{
-					"mail" : data.mails[0]			
-			}];
-			for(var i = 1 ; i<data.mails.length ; i++){
-				newData.push({"mail" : data.mails[i]});
-			}
-		}else{
-			newData = {
-					"mail" : null
-			}
-		}
-			$('#listMails').empty();
-			initTableMail();
-			table = $('#listMails').DataTable({
-				"bDestroy":"true",
-				"data" : newData,
-				"columns" : [  {
-					"data" : "mail"
-					}]			
-			});
-	    
-		document.getElementById("mails").style.visibility = "visible";		
-		$('#listMails tbody').on('click', 'tr', function() {
-			document.getElementById("SelectedMail").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
-			if ( $(this).hasClass('selected') ) {
-		        $(this).removeClass('selected');
-		    }
-		    else {			  
-		        table.$('tr.selected').removeClass('selected');
-		        $(this).addClass('selected');
-		    }
-		});
+		var newData = addDataMail(data);
+		initDataTableMail(newData);
 		});
 }
 
 
+/*
+ * init datatable object for mails list
+ */
+function initDataTableMail(newData){
+	$('#listMails').empty();
+	initTableMail();
+	var table = $('#listMails').DataTable({
+		"bDestroy":"true",
+		"initComplete" : function(){
+			setOnClickListenerMail(this);
+		} ,
+		"data" : newData,
+		"columns" : [  {
+			"data" : "mail"
+			}]			
+	});
+document.getElementById("mails").style.visibility = "visible";	
+}
+
+
+/*
+ * set a onClick listener to mail row
+ */
+function setOnClickListenerMail(table){
+	$('#listMails tbody').on('click', 'tr', function() {
+		document.getElementById("SelectedMail").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
+		if ( $(this).hasClass('selected') ) {
+	        $(this).removeClass('selected');
+	    }
+	    else {			  
+	        table.$('tr.selected').removeClass('selected');
+	        $(this).addClass('selected');
+	    }
+	});
+}
+
+
+/*
+ * convert from server returned data to json for datatable
+ */
+function addDataMail(data){
+	var newData;		
+	if(null != data.mails){
+		newData = [{
+				"mail" : data.mails[0]			
+		}];
+		for(var i = 1 ; i<data.mails.length ; i++){
+			newData.push({"mail" : data.mails[i]});
+		}
+	}else{
+		newData = {
+				"mail" : null
+		}
+	}
+	return newData;
+}
+
+/*
+ * listener for adding a new mail in the DB
+ */
 $('#btnInputMail').on('click',function() {
 	var value = document.getElementById('textInputMail').value;
 	var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -84,8 +131,7 @@ $('#btnInputMail').on('click',function() {
 			dataType: 'json'}).done(function(data) {
 				$('#listMails').DataTable().row.add({"mail":value.email}).draw(true);
 				document.getElementById('textInputMail').value = "";
-		});	
-		
+		});			
 	}
 	else{
 		alert("Bad e-mail");
@@ -93,7 +139,9 @@ $('#btnInputMail').on('click',function() {
 });
 
 
-
+/*
+ * listener for deleting a mail in DB
+ */
 $('#deleteMail').click( function () {
 	if(confirm("Are you sure?")){
 		var value = {
@@ -109,11 +157,12 @@ $('#deleteMail').click( function () {
 			}).fail(function(xhr, status, error){
 				alert("Error , \n status code ="+status+"\n Error "+xhr+" message : \n"+error);
 			});		
-		
 	}
 } );
 
-
+/*
+ * listener for adding a new project in the DB
+ */
 $('#btnInputProj').on('click',function() {
 	var value = document.getElementById('textInputProj').value;
 	var regex = /^[a-zA-Z ]+$/;
@@ -138,6 +187,9 @@ $('#btnInputProj').on('click',function() {
 });
 
 
+/*
+ * listener for deleting a project in the DB
+ */
 $('#deleteProj').click( function () {
 	if(confirm("Are you sure?")){		
 		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/delete").done(function(){
@@ -147,7 +199,9 @@ $('#deleteProj').click( function () {
 	}
 } );
 
-
+/*
+ * (re)initialise mail table components to be filled by datatables
+ */
 function initTableMail(){	
 	var thead = document.createElement("thead");
 	var tfoot = document.createElement("tfoot");
@@ -165,7 +219,9 @@ function initTableMail(){
 	document.getElementById("listMails").appendChild(tfoot);
 }
 
-
+/*
+ * initialise project table components to be filled by datatables
+ */
 function initTableProject(){	
 	var thead = document.createElement("thead");
 	var trhead = document.createElement("tr");

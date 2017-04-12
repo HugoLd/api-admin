@@ -1,8 +1,14 @@
+/*
+ * set a default mood from url
+ */
 (function() {
 	var defaultMood = window.location.search.substring(1).split("&")[3].substring(5);	
 	$("input[name=emotion][value=" + defaultMood + "]").prop('checked', true);
 })();
 
+/*
+ * Add project's name to the title
+ */
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	var url = "http://localhost:8080/api-admin/projects/" + uuid;
@@ -12,6 +18,9 @@
 	});
 })();
 
+/*
+ * handle submit event to add mood in the DB
+ */
 $('#moodSelector').submit(function (event) {
 	event.preventDefault();
 

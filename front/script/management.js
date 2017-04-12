@@ -1,4 +1,4 @@
-/**
+/*
  * set heads with url params
  */
 (function() {
@@ -16,7 +16,7 @@
 })();
 
 
-/**
+/*
  * global method for adding table
  */
 (function() {
@@ -38,10 +38,8 @@
 })();
 
 
-/**
+/*
  * getting data for each days
- * @param data
- * @returns
  */
 function eachDaysMoods(data){	
 	var values = [0,0,0,0,0]
@@ -59,33 +57,24 @@ function eachDaysMoods(data){
 		browseLists(listList,i);
 	}
 }
-/**
+/*
  * order moods (DESC)
- * @param listList
- * @param index
- * @returns
  */
 function browseLists(listList,index){
 	for(var i = 4;i>=0;i--){		
 		addMoodsToData(listList[i],index);
 	}
 }
-/**
+/*
  * add a mood to the <td>
- * @param listToAdd
- * @param index
- * @returns
  */
 function addMoodsToData(listToAdd,index){
 	for(var i = 0 ; i<listToAdd.length ; i++){
 		document.getElementById("tabData"+index).appendChild(listToAdd[i]);
 	}
 }
-/**
+/*
  * Add a new row to the tab
- * @param data
- * @param index
- * @returns
  */
 function createRow(data,index){
 	var trRow = document.createElement("tr");
@@ -96,9 +85,8 @@ function createRow(data,index){
 	document.getElementById("tabMood").appendChild(trRow);
 }
 
-/**
+/*
  * add heads to the tab
- * @returns
  */
 function addHeads(){
 	var trHead = document.createElement("tr");
@@ -111,9 +99,8 @@ function addHeads(){
 	document.getElementById("tabMood").appendChild(trHead);
 }
 
-/**
+/*
  * create the tab
- * @returns
  */
 function createTable(){
 	var tab = document.createElement("table");
@@ -121,11 +108,8 @@ function createTable(){
 	document.getElementById("moods").appendChild(tab);
 }
 
-/**
+/*
  * return the picture depending on params
- * @param data
- * @param index
- * @returns
  */
 function createImg(data,index){
 	var imgMood = document.createElement("img");
@@ -142,7 +126,7 @@ function createImg(data,index){
 	
 }
 
-/**
+/*
  * global method for adding moods count
  */
 (function() {
@@ -154,10 +138,8 @@ function createImg(data,index){
 		}
 	});
 })();
-/**
+/*
  * get data for each days
- * @param data
- * @returns
  */
 function eachDaysCount(data){	
 	var values = [0,0,0,0,0]
@@ -172,6 +154,9 @@ function eachDaysCount(data){
 		createDiv(values[v],v);
 	}
 }
+/*
+ * clone the mood's div
+ */
 function createDiv(value ,index){
 	var clone = document.getElementById("countDuplicate").cloneNode(true);
 	clone.setAttribute("id","count"+index);
