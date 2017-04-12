@@ -170,7 +170,6 @@ function eachDaysCount(data){
 	}
 	for(var v = 4;v>=0;v--){
 		createDiv(values[v],v);
-		console.log(values[v]);
 	}
 }
 function createDiv(value ,index){

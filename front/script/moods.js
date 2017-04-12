@@ -26,7 +26,6 @@ $('#moodSelector').submit(function (event) {
 		"comment": $("textarea[name=comment]").val(),
 		"date":moodDate
 	};
-	console.log(data);
 	
 	$.ajax({
 		url: url,

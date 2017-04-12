@@ -14,7 +14,6 @@ $(document).ready(function() {
 		$('#projects tbody').on('click', 'tr', function() {
 				document.getElementById("ProjectId").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
 				initMails($(this).children("td")[0].childNodes[0].nodeValue);
-				console.log("info");
 				if ( $(this).hasClass('selected') ) {			    	
 			        $(this).removeClass('selected');
 			    }
@@ -100,13 +99,12 @@ $('#deleteMail').click( function () {
 		var value = {
 				"email" : document.getElementById("SelectedMail").getAttribute("value")
 		}		
-		console.log(value);
+		
 		$.ajax({
 			url: "http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/deleteUser",
 			type: "POST",
 			data: JSON.stringify(value),
 			contentType: "application/json"}).done(function() {
-				console.log("hello");
 				$('#listMails').DataTable().row('.selected').remove().draw( true );
 			}).fail(function(xhr, status, error){
 				alert("Error , \n status code ="+status+"\n Error "+xhr+" message : \n"+error);
@@ -123,7 +121,6 @@ $('#btnInputProj').on('click',function() {
 		value = {
 				"title" : value
 		}
-		console.log(value);
 		$.ajax({
 			url: "http://localhost:8080/api-admin/projects",
 			type: "POST",
@@ -142,8 +139,7 @@ $('#btnInputProj').on('click',function() {
 
 
 $('#deleteProj').click( function () {
-	if(confirm("Are you sure?")){
-		console.log(document.getElementById("ProjectId").getAttribute("value"));		
+	if(confirm("Are you sure?")){		
 		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/delete").done(function(){
 			$('#projects').DataTable().row('.selected').remove().draw( true );
 		});
