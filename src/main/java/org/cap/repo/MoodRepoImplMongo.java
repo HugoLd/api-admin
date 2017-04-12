@@ -48,8 +48,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	 */
 	@Override
 	public List<Mood> getAll() {
-		Query q = new Query();
-		return mongoTemplate.find(q, Mood.class);
+		return mongoTemplate.find(new Query(), Mood.class);
 	}
 
 	/**

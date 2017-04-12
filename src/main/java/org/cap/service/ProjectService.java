@@ -140,7 +140,7 @@ public class ProjectService {
 	 * @throws TemplateException 
 	 * @throws IOException 
 	 */
-	public void sendMail(String uuid) throws IOException, TemplateException {
+	public boolean sendMail(String uuid) throws IOException, TemplateException {
 		Project project = prim.get(uuid);
 		if (project == null) {
 			throw new IllegalArgumentException("UUID or project null");
@@ -157,7 +157,7 @@ public class ProjectService {
 			props.put("projectName", project.getTitle());
 			mailService.sendEmail(props, mail);
 		}
-
+		return true;
 	}
 	/**
 	 * send the mail to everyone
@@ -173,14 +173,12 @@ public class ProjectService {
 		}
 	}
 
-	public Object deleteProj(String uuidProj) {
+	public void deleteProj(String uuidProj) {
 		prim.delete(uuidProj);
-		return null;
 	}
 
-	public Object deleteUser(String email, String uuidProj) {
+	public void deleteUser(String email, String uuidProj) {
 		prim.deleteUser(email,uuidProj);
-		return null;
 	}
 
 

@@ -1,5 +1,6 @@
 package org.cap.service;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -229,4 +230,37 @@ public class ProjectServiceTest extends TestCase {
 		verify(prim).get(A_PROJECT_ID);
 		verify(mailService).checkProperties();
 	}
+	
+	@Test
+	public void testSendMailAll_shouldCallSend2Times_whenListLength2() throws IOException, TemplateException {
+		List<Project> lp = new ArrayList<Project>();
+		lp.add(new Project());		
+		lp.add(new Project());
+		lp.get(0).setTitle("title");
+		lp.get(0).setId(A_PROJECT_ID);
+		lp.get(1).setTitle("test");
+		lp.get(1).setId("idproj2");
+		when(mailService.checkProperties()).thenReturn(true);
+		when(prim.getAll()).thenReturn(lp);
+		when(prim.get(lp.get(0).getId())).thenReturn(A_PROJECT);
+		when(prim.get(lp.get(1).getId())).thenReturn(A_PROJECT);
+		pServ.sendMailAll();
+		verify(prim).get(A_PROJECT_ID);
+		verify(prim).get("idproj2");
+		verify(prim).get(A_PROJECT_ID);
+		verify(mailService,times(2)).checkProperties();
+	}
+	
+	
+	@Test
+	public void testDeleteProj_shouldNotThrowEx_whenCalled(){	
+		pServ.deleteProj(A_PROJECT_ID);
+		verify(prim).delete(A_PROJECT_ID);		
+	}
+	@Test
+	public void testDeleteUser_shouldNotThrowEx_whenCalled(){	
+		pServ.deleteUser("hello@mail.com" ,A_PROJECT_ID);
+		verify(prim).deleteUser("hello@mail.com",A_PROJECT_ID);		
+	}
 }
+

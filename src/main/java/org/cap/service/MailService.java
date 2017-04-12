@@ -163,7 +163,7 @@ public class MailService {
 	public boolean checkProperties() {
 		if (environment.getProperty("smtp.baseLink") != null && environment.getProperty("smtp.host") != null
 				&& environment.getProperty("smtp.port") != null && environment.getProperty("smtp.address") != null
-				&& environment.getProperty("smtp.password") != null)
+				&& environment.getProperty("smtp.password") != null && environment.getProperty("smtp.auth") != null)
 			return true;
 		throw new IllegalArgumentException("At least one property missing");
 	}

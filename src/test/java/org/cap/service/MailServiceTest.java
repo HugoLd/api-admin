@@ -1,5 +1,7 @@
 package org.cap.service;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,7 +20,6 @@ import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
 @Configuration
-@PropertySource("classpath:/mail.properties")
 public class MailServiceTest extends TestCase {
 	@InjectMocks
 	MailService mailService;
@@ -67,7 +68,9 @@ public class MailServiceTest extends TestCase {
 		when(env.getProperty("smtp.port")).thenReturn("587");
 		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
 		when(env.getProperty("smtp.password")).thenReturn("123");		
+		when(env.getProperty("smtp.auth")).thenReturn("true");	
 		assertTrue(mailService.checkProperties());
+		verify(env).getProperty("smtp.auth");
 		verify(env).getProperty("smtp.baseLink");
 		verify(env).getProperty("smtp.host");
 		verify(env).getProperty("smtp.port");
@@ -81,16 +84,32 @@ public class MailServiceTest extends TestCase {
 		verify(env).getProperty("smtp.address");
 	}
 	@Test
-	public void testInitMailSender_souldNotBeNull_WhenCalled(){
+	public void testInitMailSender_souldCallPwdAndAdr_WhenAuthTrue(){
 		when(env.getProperty("smtp.host")).thenReturn("host");
 		when(env.getProperty("smtp.port")).thenReturn("587");
+		when(env.getProperty("smtp.auth")).thenReturn("true");
 		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
 		when(env.getProperty("smtp.password")).thenReturn("123");		
 		assertTrue(mailService.initMailSender() != null);
 		verify(env).getProperty("smtp.host");
 		verify(env).getProperty("smtp.port");
+		verify(env,times(2)).getProperty("smtp.auth");
 		verify(env).getProperty("smtp.address");
 		verify(env).getProperty("smtp.password");
+	}
+	@Test
+	public void testInitMailSender_souldNotBeNull_WhenCalled(){
+		when(env.getProperty("smtp.host")).thenReturn("host");
+		when(env.getProperty("smtp.port")).thenReturn("587");
+		when(env.getProperty("smtp.auth")).thenReturn("false");
+		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
+		when(env.getProperty("smtp.password")).thenReturn("123");		
+		assertTrue(mailService.initMailSender() != null);
+		verify(env).getProperty("smtp.host");
+		verify(env).getProperty("smtp.port");
+		verify(env,times(2)).getProperty("smtp.auth");
+		verify(env,never()).getProperty("smtp.address");
+		verify(env,never()).getProperty("smtp.password");
 	}
 	
 	
