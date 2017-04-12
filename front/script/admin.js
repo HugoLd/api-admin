@@ -27,51 +27,24 @@ $(document).ready(function() {
 	});
 });
 
-function initTableMail(){	
-	var thead = document.createElement("thead");
-	var tfoot = document.createElement("tfoot");
-	var trhead = document.createElement("tr");
-	var trfoot = document.createElement("tr");
-	var thhead = document.createElement("th");
-	var thfoot = document.createElement("th");
-	thhead.appendChild(document.createTextNode("mail"));
-	thfoot.appendChild(document.createTextNode("mail"));
-	trhead.appendChild(thhead);
-	trfoot.appendChild(thfoot);
-	thead.appendChild(trhead);
-	tfoot.appendChild(trfoot);
-	document.getElementById("listMails").appendChild(thead);
-	document.getElementById("listMails").appendChild(tfoot);
-}
 
-
-function initTableProject(){	
-	var thead = document.createElement("thead");
-	var tfoot = document.createElement("tfoot");
-	var tr = document.createElement("tr");
-	var th1 = document.createElement("th");
-	var th2 = document.createElement("th");
-	th1.appendChild(document.createTextNode("id"));
-	th2.appendChild(document.createTextNode("title"));
-	tr.appendChild(th1);
-	tr.appendChild(th2);
-	thead.appendChild(tr);
-	tfoot.appendChild(tr);
-	document.getElementById("projects").appendChild(thead);
-	document.getElementById("projects").appendChild(tfoot);
-}
 
 
 function initMails(id) {
 	$.get("http://localhost:8080/api-admin/projects/" + id).done(function(data) {		
-		var newData;
+		var newData;		
 		if(null != data.mails){
-			newData ="[{\"mail\" : \""+data.mails[0]+"\"}";
+			newData = [{
+					"mail" : data.mails[0]			
+			}];
 			for(var i = 1 ; i<data.mails.length ; i++){
-				newData += ",{\"mail\" : \""+data.mails[i]+"\"}";
+				newData.push({"mail" : data.mails[i]});
 			}
-			newData += "]";
-			newData = JSON.parse(newData);
+		}else{
+			newData = {
+					"mail" : null
+			}
+		}
 			$('#listMails').empty();
 			initTableMail();
 			table = $('#listMails').DataTable({
@@ -81,11 +54,10 @@ function initMails(id) {
 					"data" : "mail"
 					}]			
 			});
-	    }
+	    
 		document.getElementById("mails").style.visibility = "visible";		
 		$('#listMails tbody').on('click', 'tr', function() {
 			document.getElementById("SelectedMail").setAttribute("value",($(this).children("td")[0].childNodes[0].nodeValue));			
-			console.log("hello");
 			if ( $(this).hasClass('selected') ) {
 		        $(this).removeClass('selected');
 		    }
@@ -96,6 +68,7 @@ function initMails(id) {
 		});
 		});
 }
+
 
 $('#btnInputMail').on('click',function() {
 	var value = document.getElementById('textInputMail').value;
@@ -111,6 +84,7 @@ $('#btnInputMail').on('click',function() {
 			contentType: "application/json",
 			dataType: 'json'}).done(function(data) {
 				$('#listMails').DataTable().row.add({"mail":value.email}).draw(true);
+				document.getElementById('textInputMail').value = "";
 		});	
 		
 	}
@@ -158,6 +132,7 @@ $('#btnInputProj').on('click',function() {
 			dataType: 'json'
 		}).done(function(data) {
 			$('#projects').DataTable().row.add(data).draw(true);
+			document.getElementById('textInputMail').value = "";
 		});		
 	}
 	else{
@@ -177,4 +152,43 @@ $('#deleteProj').click( function () {
 } );
 
 
+function initTableMail(){	
+	var thead = document.createElement("thead");
+	var tfoot = document.createElement("tfoot");
+	var trhead = document.createElement("tr");
+	var trfoot = document.createElement("tr");
+	var thhead = document.createElement("th");
+	var thfoot = document.createElement("th");
+	thhead.appendChild(document.createTextNode("mail"));
+	thfoot.appendChild(document.createTextNode("mail"));
+	trhead.appendChild(thhead);
+	trfoot.appendChild(thfoot);
+	thead.appendChild(trhead);
+	tfoot.appendChild(trfoot);
+	document.getElementById("listMails").appendChild(thead);
+	document.getElementById("listMails").appendChild(tfoot);
+}
 
+
+function initTableProject(){	
+	var thead = document.createElement("thead");
+	var trhead = document.createElement("tr");
+	var th1head = document.createElement("th");
+	var th2head = document.createElement("th");
+	var tfoot = document.createElement("tfoot");
+	var trfoot = document.createElement("tr");
+	var th1foot = document.createElement("th");
+	var th2foot = document.createElement("th");
+	th1foot.appendChild(document.createTextNode("id"));
+	th2foot.appendChild(document.createTextNode("title"));
+	th1head.appendChild(document.createTextNode("id"));
+	th2head.appendChild(document.createTextNode("title"));	
+	trhead.appendChild(th1head);
+	trhead.appendChild(th2head);
+	trfoot.appendChild(th1foot);
+	trfoot.appendChild(th2foot);
+	thead.appendChild(trhead);
+	tfoot.appendChild(trfoot);
+	document.getElementById("projects").appendChild(thead);
+	document.getElementById("projects").appendChild(tfoot);
+}
