@@ -12,6 +12,9 @@ import java.util.Properties;
 import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
+
+import org.cap.bean.MoodValue;
+import org.cap.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -37,6 +40,9 @@ public class MailService {
 	JavaMailSender mailSender;
 	@Autowired
 	Configuration freemarkerConfiguration;
+	Util util;
+	private final String formatWithDay = "EEEE, dd/MM/yyyy";
+	private final String formatWithoutDay= "dd-MM-yyyy";
 
 	/**
 	 * Initialize the mailsender with properties
@@ -52,12 +58,15 @@ public class MailService {
 		Template temp;
 		mailSender = initMailSender();
 		FileTemplateLoader templateLoader = null;
-		templateLoader = new FileTemplateLoader(
-				new File(getClass().getClassLoader().getResource("template").getFile()));
-		freemarkerConfiguration.setTemplateLoader(templateLoader);
-		temp = freemarkerConfiguration.getTemplate("mailTemplate.ftl");
-		mailSender.send(initPreparator(templatedMimeMessage, addressTo, temp));
-		return true;
+		if(getClass().getClassLoader().getResource("template") != null){
+			templateLoader = new FileTemplateLoader(new File(getClass().getClassLoader().getResource("template").getFile()));			
+			freemarkerConfiguration.setTemplateLoader(templateLoader);
+			temp = freemarkerConfiguration.getTemplate("mailTemplate.ftl");
+			mailSender.send(initPreparator(templatedMimeMessage, addressTo, temp));
+			return true;
+		}
+		return false;
+		
 	}
 
 	/**
@@ -80,7 +89,7 @@ public class MailService {
 				MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 				helper.addTo(addressTo);
 				helper.setFrom(getAddress());
-				helper.setSubject("Daily mood");
+				helper.setSubject(environment.getProperty("mail.subject"));
 				helper.setText(messageText, true);
 			}
 
@@ -126,7 +135,7 @@ public class MailService {
 	 */
 	public String getDateNowWithDayOfWeek() {
 		Date date = Calendar.getInstance().getTime();
-		SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd/MM/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat(formatWithDay);
 		return formatter.format(date);
 	}
 
@@ -136,7 +145,7 @@ public class MailService {
 	 */
 	public String getDateNow() {
 		Date date = Calendar.getInstance().getTime();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat(formatWithoutDay);
 		return formatter.format(date);
 	}
 
@@ -150,13 +159,13 @@ public class MailService {
 	 */
 	public String[] generateLinks(String uuid, String mail, String date) {
 		String baseLink = environment.getProperty("smtp.baseLink");
-		String uuMood = UUID.nameUUIDFromBytes((uuid + "+" + mail + "+" + date).getBytes()).toString();
+		String uuMood = Util.generateUUID(uuid, mail, date);
 		String[] tabDate = new String[5];
-		tabDate[4] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "4";
-		tabDate[3] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "3";
-		tabDate[2] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "2";
-		tabDate[1] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "1";
-		tabDate[0] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + "0";
+		tabDate[4] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.REALLYGOOD.getValue();
+		tabDate[3] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.GOOD.getValue();
+		tabDate[2] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.AVERAGE.getValue();
+		tabDate[1] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.BAD.getValue();
+		tabDate[0] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.REALLYBAD.getValue();
 		return tabDate;
 	}
 

@@ -13,6 +13,7 @@ import org.cap.bean.Mood;
 import org.cap.bean.Project;
 import org.cap.repo.MoodRepoImplMongo;
 import org.cap.repo.ProjectRepoImplMongo;
+import org.cap.utils.Util;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +29,13 @@ public class MoodServiceTest {
 	MoodRepoImplMongo mrim;
 	@Mock
 	ProjectRepoImplMongo prim;
+	@Mock
+	public Util util;
 	public static final List<List<Mood>> A_LIST_OF_LIST = new ArrayList<List<Mood>>();
 	public static final List<Mood> A_LIST = new ArrayList<Mood>();
 	public static final Project A_PROJECT = new Project();
 	public static final String A_DATE = "23-01-2017";
 	public static final String AN_UUID = UUID.nameUUIDFromBytes(("12345-6789-AZUSI"+"+hello@gmail.com+"+A_DATE).getBytes()).toString();
-
 	public static final Mood A_MOOD = new Mood(AN_UUID,"12345-6789-AZUSI",0,"",A_DATE);
 
 	@Before
@@ -67,12 +69,7 @@ public class MoodServiceTest {
 	public void testSortListMood_shouldBeAListOfList_WhenOk(){
 		assertEquals(moodServ.sortProjectMoods(A_LIST).getClass(),ArrayList.class);
 	}
-	@Test
-	public void testSaveMood_shouldBeAMood_WhenMailIn(){
-		when(prim.get("12345-6789-AZUSI")).thenReturn(A_PROJECT);		
-		assertEquals(moodServ.saveMood(A_MOOD).getClass(),Mood.class);
-		verify(prim).get("12345-6789-AZUSI");
-	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveMood_shouldBeIAException_WhenMailNotIn(){
 		Mood m = new Mood();

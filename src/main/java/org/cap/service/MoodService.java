@@ -2,12 +2,13 @@ package org.cap.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.cap.bean.Mood;
+import org.cap.bean.MoodValue;
 import org.cap.bean.Project;
 import org.cap.repo.MoodRepoImplMongo;
 import org.cap.repo.ProjectRepoImplMongo;
+import org.cap.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class MoodService {
 	MoodRepoImplMongo mrim;
 	@Autowired
 	ProjectRepoImplMongo prim;
+	Util util;
 
 	/**
 	 * get the list of daily moods' list
@@ -53,9 +55,9 @@ public class MoodService {
 		List<List<Mood>> listList = new ArrayList<List<Mood>>();
 		List<Mood> lm;
 		int numList;
-		for (Mood m : moods) {
-			numList = searchDate(listList, m.getDate());
-			if (numList != -1) {
+		for (Mood m : moods) { 
+			numList = searchDate(listList, m.getDate()); // get the mood for a date order by date
+			if (numList != -1) { 
 				listList.get(numList).add(m);
 			} else {
 				lm = new ArrayList<Mood>();
@@ -75,8 +77,12 @@ public class MoodService {
 	 */
 	public int searchDate(List<List<Mood>> listList, String date) {
 		for (int i = 0; i < listList.size(); i++) {
-			if (listList.get(i).get(0).getDate().equals(date)) {
-				return i;
+			if (listList.get(i).get(0) != null) {
+				if (listList.get(i).get(0).getDate() != null) {
+					if (listList.get(i).get(0).getDate().equals(date)) {
+						return i;
+					}
+				}
 			}
 		}
 		return -1;
@@ -117,16 +123,21 @@ public class MoodService {
 	 * @param m
 	 * @return
 	 */
-	private boolean checkMoodOk(Mood mood) {		
-		return (mood.getDate() != null && mood.getUuid() != null && mood.getUuidProj() != null && checkNoCheat(mood));
-
+	private boolean checkMoodOk(Mood mood) {
+		return (mood.getDate() != null && mood.getUuid() != null && mood.getUuidProj() != null
+				&& MoodValue.getEnumValue(mood.getMood()) != null && checkNoCheat(mood));
 	}
 
+	/**
+	 * check if the
+	 * 
+	 * @param mood
+	 * @return
+	 */
 	private boolean checkNoCheat(Mood mood) {
 		Project proj = prim.get(mood.getUuidProj());
 		for (String mail : proj.getMails()) {
-			if (UUID.nameUUIDFromBytes((mood.getUuidProj() + "+" + mail + "+" + mood.getDate()).getBytes()).toString()
-					.equals(mood.getUuid())) {
+			if (Util.generateUUID(mood.getUuid(), mail, mood.getDate()).equals(mood.getUuid())) {
 				return true;
 			}
 		}

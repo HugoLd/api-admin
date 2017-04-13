@@ -46,6 +46,7 @@ public class MailServiceTest extends TestCase {
 
 	@Test
 	public void testGetDateNow_shouldContainsMinus_whenCall(){
+		System.out.println(mailService.getDateNow());
 		assertEquals(mailService.getDateNow().contains("-"),true);
 	}
 	@Test

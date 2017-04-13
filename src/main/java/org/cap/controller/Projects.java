@@ -64,7 +64,7 @@ public class Projects {
 
 	/**
 	 * 
-	 * 
+	 * controller /projects getting the projects' list ( doesn't include mails)
 	 * @return list of projects
 	 */
 	@RequestMapping(value = "/projects", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,7 +74,7 @@ public class Projects {
 
 	}
 	/**
-	 *  
+	 * controller /allProjects getting the projects' list including mails
 	 * @return complete list of projects
 	 */
 	@RequestMapping(value = "/allProjects", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,7 +85,7 @@ public class Projects {
 	}
 
 	/**
-	 * 
+	 * url for getting a project
 	 * @param uuid
 	 * @return project
 	 */

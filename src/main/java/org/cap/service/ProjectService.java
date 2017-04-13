@@ -25,7 +25,6 @@ public class ProjectService {
 	ObjectMapper mapper = new ObjectMapper();
 
 	public Project addProject(String title) {
-		// validation
 		if (null == title || title.matches("^[ \t]*$")) {
 			throw new IllegalArgumentException("incorrect project title");
 		}
@@ -33,7 +32,6 @@ public class ProjectService {
 			throw new IllegalArgumentException("title already exist");
 		}
 
-		// sauvegarde
 		Project project = new Project();
 		project.setId(UUID.randomUUID().toString());
 		project.setTitle(title);

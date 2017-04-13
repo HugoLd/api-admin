@@ -96,6 +96,11 @@
 	background-repeat:no-repeat;
 	background-size:20% 100%;
 }
+#graphs .c3-chart-arcs-title {
+  font-weight : bold;
+  fill: red;
+  font: 32px;
+}
 .form-comment #count1 {
 	font-weight:bold;
 	text-align:center;

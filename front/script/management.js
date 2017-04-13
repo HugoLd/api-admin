@@ -199,7 +199,7 @@ function makeStats(data){
 	console.log(listCom);
 	avg = avg/total;
 	createDivBefore("Average mood : "+Math.trunc(avg),Math.trunc(avg));
-	useC3(values);
+	useC3(values,Math.round(avg * 100) / 100);
 	initCommentTable(listCom);
 	
 }
@@ -214,7 +214,7 @@ function createDivBefore(value ,index){
 }
 
 
-function useC3(values){
+function useC3(values,avg){
 	var chart = c3.generate({
 		bindto:'#graphs',	
 		 size: {
@@ -244,7 +244,7 @@ function useC3(values){
 	    },
 	    donut: {
 	    	width:180,
-	        title: "My day was :"
+	        title: avg
 	    }
 	});
 }
