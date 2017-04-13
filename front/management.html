@@ -2,19 +2,39 @@
 <html>
 <head>
 <LINK href="style/style.css" rel="stylesheet" type="text/css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"	href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
 </head>
 <body>
 	<div class="form-comment">
 		<h1 id="title"></h1>
+		<nav id="menu">
+			<form id="tab">
+				<input type="button" id="moodsBtn" value = "Show moods"/>
+				<input type="button" id="statsBtn" value = "Show stats"/>
+			</form>
+		</nav>
 		<div id=content>
 			<div id="moods"></div>
 			<div id="count">
-				<div id="countDuplicate"></div>
 			</div>
+			<div id="stats">
+				<table id="tabComments">
+					<thead>
+						<th>date</th>
+						<th>comment</th>
+					<thead>
+				</table>
+			</div>
+			<div id="graphs"></div>
+			<div id="countDuplicate"></div>
 		</div>
-		<script type='text/javascript' src="script/management.js"></script>
+	</div>
+	<script type='text/javascript' src="script/management.js"></script>
 	</div>
 </body>
 </html>

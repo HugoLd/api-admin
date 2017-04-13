@@ -2,8 +2,46 @@
 * {
 	
 }
+.form-comment #stats {
+	width: 52%;
+	text-align: left;
+	display:none;	
+	float:right;	
+	height:95%;
+	padding:2px;
+	
+}
+.form-comment #tabComments_wrapper {
+	width: 98%;	
+	max-height:10%;
+}
+.form-comment #stats tbody tr :nth-child(1){
+	width:15%;
+	
+}
+
+.form-comment #tab input[type="button"]{
+	background : #0097E5;
+	margin:10px;
+	color:white;
+	padding:4px;
+	width:30%;
+	
+}
+.form-comment #stats tbody tr :nth-child(2){
+	width:78%;
+	
+}
+.form-comment #graphs {
+
+	width: 45%;
+	text-align: left;	
+	display:none;
+	padding:2px;
+	
+}
 .form-comment #moods {
-	width: 48%;
+	width: 66%;
 	text-align: center;
 	border: 2px solid #0097E5;
 	display:inline-block;
@@ -37,7 +75,7 @@
 }
 .form-comment #count {
 	height:48%;
-	width : 50%;
+	width : 30%;
 	float:right;	
 	display:inline-block;
 }
