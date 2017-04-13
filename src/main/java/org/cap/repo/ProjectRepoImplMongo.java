@@ -28,12 +28,18 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	private MongoTemplate mongoTemplate;
 	@Autowired
 	private Environment environment; // getting environment for properties
+	
+	/**
+	 * Empty Constructor
+	 */
+	public ProjectRepoImplMongo() {
+	}
 
 	/**
 	 * init the Template after constructor getting infos in properties file
 	 */
 	@PostConstruct
-	public void init() {
+	private void init() {
 		checkProperties();
 		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
 				Integer.parseInt(environment.getProperty("mongo.port")));
@@ -44,17 +50,12 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * check if properties are well set
 	 * @return boolean
 	 */
-	public void checkProperties(){
+	private void checkProperties(){
 		if(environment.getProperty("mongo.host") == null || environment.getProperty("mongo.port") == null || environment.getProperty("mongo.database") == null){
 			throw new IllegalArgumentException("At least one property missing");
 		}
 	}
-
-	/**
-	 * Empty Constructor
-	 */
-	public ProjectRepoImplMongo() {
-	}
+	
 
 	/**
 	 * insert project in db
@@ -119,6 +120,10 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		q.fields().include("title");		
 		return mongoTemplate.find(q,Project.class);
 	}
+	/**
+	 * get all the projects with e mail addresses
+	 * @return
+	 */
 	public List<Project> getAllWithMails() {	
 		Query q = new Query();
 		q.fields().include("_id");
@@ -126,6 +131,11 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 		q.fields().include("mails");
 		return mongoTemplate.find(q,Project.class);
 	}
+	/**
+	 * update a project to delete an user
+	 * @param email
+	 * @param uuidProj
+	 */
 	public void deleteUser(String email, String uuidProj) {
 		Project proj = get(uuidProj);
 		proj.getMails().remove(email);

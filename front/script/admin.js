@@ -165,7 +165,7 @@ $('#deleteMail').click( function () {
  */
 $('#btnInputProj').on('click',function() {
 	var value = document.getElementById('textInputProj').value;
-	var regex = /^[a-zA-Z ]+$/;
+	var regex = /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/;
 	if(regex.test(value)){
 		value = {
 				"title" : value
@@ -194,6 +194,22 @@ $('#deleteProj').click( function () {
 	if(confirm("Are you sure?")){		
 		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/delete").done(function(){
 			$('#projects').DataTable().row('.selected').remove().draw( true );
+		}).fail(function(){
+			console.log("Delete failed");
+		});
+		
+	}
+} );
+
+/*
+ * listener for deleting a project in the DB
+ */
+$('#purgeProj').click( function () {
+	if(confirm("Do you really want to purge this project?")){		
+		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/purge").done(function(){
+			alert("Purge success");
+		}).fail(function(){
+			alert("Purge failed");
 		});
 		
 	}

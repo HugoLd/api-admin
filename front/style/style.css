@@ -297,16 +297,17 @@ td img{
 	border-left-style: none;
 	color: #fff;
 }
+
 .table input[type="button"]:nth-child(3) {
-	float:right;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
+	float:right;	
 	background: #ED1C24;
-	border-bottom: 2px solid #C91C24;
-	border-top-style: none;
-	border-right-style: none;
-	border-left-style: none;
+	border-bottom: 2px solid #C91C24;	
+	color: #fff;
+}
+.table input[type="button"]:nth-child(4) {
+	float:right;	
+	background: #FF7F27;
+	border-bottom: 2px solid #FF5F27;	
 	color: #fff;
 }
 .form-comment input[type="submit"]:hover {

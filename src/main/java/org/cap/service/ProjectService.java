@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.cap.bean.Project;
 import org.cap.repo.ProjectRepoImplMongo;
+import org.cap.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,17 @@ public class ProjectService {
 	@Autowired
 	protected MailService mailService;
 	ObjectMapper mapper = new ObjectMapper();
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
 
+
+	/**
+	 * add a project to the DB
+	 * @param title
+	 * @return
+	 */
 	public Project addProject(String title) {
-		if (null == title || title.matches("^[ \t]*$")) {
+		if (null == title || !title.matches("^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$")) {
 			throw new IllegalArgumentException("incorrect project title");
 		}
 		if (isTitleAlreadyExists(title)) {
@@ -38,7 +47,12 @@ public class ProjectService {
 		prim.save(project);
 		return project;
 	}
-
+	/**
+	 * add an e mail to the project
+	 * @param projectUUID
+	 * @param email
+	 * @return
+	 */
 	public Project addUserToProject(String projectUUID, String email) {
 		if (!isAnEmail(email)) {
 			throw new IllegalArgumentException("invalid email");
@@ -56,40 +70,12 @@ public class ProjectService {
 	}
 
 	/**
-	 * try to add a project when POST on /projects if request is ok return 201 +
-	 * Project Json if not ok return 400
-	 * 
-	 * @param title
-	 * @return
-	 * @throws IllegalArgumentException
-	 *             si param KO
-	 */
-	public Project saveProject(Project project) {
-		if (null == project) {
-			throw new IllegalArgumentException("incorrect project title");
-		}
-		if (null == project.getTitle() || project.getTitle().matches("^[ \t]*$")) {
-			throw new IllegalArgumentException("incorrect project title");
-		}
-		if (isTitleAlreadyExists(project.getTitle())) {
-			throw new IllegalArgumentException("title already exist");
-		}
-
-		// sauvegarde
-		prim.save(project);
-		return project;
-	}
-
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-
-	/**
-	 * check if it seems to be a real email
+	 * check if it match an e mail pattern
 	 * 
 	 * @param email
 	 * @return
 	 */
-	protected boolean isAnEmail(String email) {
+	private boolean isAnEmail(String email) {
 		return VALID_EMAIL_ADDRESS_REGEX.matcher(email).find();
 	}
 
@@ -99,7 +85,7 @@ public class ProjectService {
 	 * @param title
 	 * @return true si le title exists en base
 	 */
-	public boolean isTitleAlreadyExists(String title) {
+	private boolean isTitleAlreadyExists(String title) {
 		return prim.getObjectByTitle(title) != null;
 	}
 
@@ -123,6 +109,7 @@ public class ProjectService {
 	}
 
 	/**
+	 * Get a project with its id
 	 * @param uuid
 	 * @return project
 	 */
@@ -148,8 +135,8 @@ public class ProjectService {
 		}
 
 		final Map<String, Object> props = new HashMap<String, Object>();
-		props.put("date", mailService.getDateNowWithDayOfWeek());
-		String date = mailService.getDateNow();
+		props.put("date", Util.getDateNowWithDayOfWeek());
+		String date = Util.getDateNow();
 		for (String mail : project.getMails()) {
 			props.put("url", mailService.generateLinks(uuid, mail, date));
 			props.put("projectName", project.getTitle());
@@ -170,14 +157,22 @@ public class ProjectService {
 			sendMail(proj.getId());
 		}
 	}
-
+	/**
+	 * delete a project
+	 * @param uuidProj
+	 */
 	public void deleteProj(String uuidProj) {
 		prim.delete(uuidProj);
 	}
-
+	/**
+	 * remove an user from a project
+	 * @param email
+	 * @param uuidProj
+	 */
 	public void deleteUser(String email, String uuidProj) {
 		prim.deleteUser(email,uuidProj);
 	}
+	
 
 
 }

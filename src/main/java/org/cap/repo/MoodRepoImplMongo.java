@@ -22,8 +22,11 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	@Autowired
 	private Environment environment; // getting environment for properties
 
+	/**
+	 * init the Template after constructor getting infos in properties file
+	 */
 	@PostConstruct
-	public void init() {
+	private void init() {
 		checkProperties();
 		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
 				Integer.parseInt(environment.getProperty("mongo.port")));
@@ -36,7 +39,7 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 	 * 
 	 * @return boolean
 	 */
-	public void checkProperties() {
+	private void checkProperties() {
 		if (environment.getProperty("mongo.host") == null || environment.getProperty("mongo.port") == null
 				|| environment.getProperty("mongo.database") == null) {
 			throw new IllegalArgumentException("A least one property missing");

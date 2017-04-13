@@ -150,6 +150,7 @@ public class Projects {
 	@RequestMapping(value = "/projects/{uuidProj}/moods", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public Mood addMood(@PathVariable("uuidProj") String uuidProj, @RequestBody AddMoodInput mood) {
+		
 		mood.setUuidProj(uuidProj);
 		Mood moodToSave = new Mood(mood.getUuid(), uuidProj, mood.getMood(), mood.getComment(), mood.getDate());
 		return mServ.saveMood(moodToSave);
@@ -168,7 +169,18 @@ public class Projects {
 		pServ.deleteProj(uuidProj);
 	}
 	
-	
+	/**
+	 * purge a project from the DB
+	 * 
+	 * @param uuid
+	 * @param json
+	 * @throws EmptyResultDataAccessException
+	 */
+	@RequestMapping(value = "/projects/{uuidProj}/purge", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public void purgeProject(@PathVariable("uuidProj") String uuidProj) {	
+		mServ.purgeProj(uuidProj);
+	}
 	/**
 	 * get mood from an user
 	 * 

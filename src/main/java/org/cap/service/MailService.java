@@ -3,13 +3,9 @@ package org.cap.service;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 import java.util.Properties;
-import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
@@ -41,8 +37,7 @@ public class MailService {
 	@Autowired
 	Configuration freemarkerConfiguration;
 	Util util;
-	private final String formatWithDay = "EEEE, dd/MM/yyyy";
-	private final String formatWithoutDay= "dd-MM-yyyy";
+	private final String MAIL_TEMPLATE = "mailTemplate.ftl";
 
 	/**
 	 * Initialize the mailsender with properties
@@ -61,7 +56,7 @@ public class MailService {
 		if(getClass().getClassLoader().getResource("template") != null){
 			templateLoader = new FileTemplateLoader(new File(getClass().getClassLoader().getResource("template").getFile()));			
 			freemarkerConfiguration.setTemplateLoader(templateLoader);
-			temp = freemarkerConfiguration.getTemplate("mailTemplate.ftl");
+			temp = freemarkerConfiguration.getTemplate(MAIL_TEMPLATE);
 			mailSender.send(initPreparator(templatedMimeMessage, addressTo, temp));
 			return true;
 		}
@@ -79,7 +74,7 @@ public class MailService {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public MimeMessagePreparator initPreparator(Map<String, Object> templatedMimeMessage, String addressTo,
+	private MimeMessagePreparator initPreparator(Map<String, Object> templatedMimeMessage, String addressTo,
 			Template temp) throws IOException, TemplateException {
 		return new MimeMessagePreparator() {
 			String messageText = FreeMarkerTemplateUtils.processTemplateIntoString(temp, templatedMimeMessage);
@@ -102,7 +97,7 @@ public class MailService {
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public JavaMailSender initMailSender() {
+	private JavaMailSender initMailSender() {
 		JavaMailSenderImpl jms = new JavaMailSenderImpl();
 		jms.setHost(environment.getProperty("smtp.host"));
 		jms.setPort(Integer.parseInt(environment.getProperty("smtp.port")));		
@@ -122,32 +117,13 @@ public class MailService {
 	}
 
 	/**
-	 * 
+	 * get the addreww from properties
 	 * @return the from address
 	 */
-	public String getAddress() {
+	private String getAddress() {
 		return environment.getProperty("smtp.address");
 	}
 
-	/**
-	 * 
-	 * @return the today's date
-	 */
-	public String getDateNowWithDayOfWeek() {
-		Date date = Calendar.getInstance().getTime();
-		SimpleDateFormat formatter = new SimpleDateFormat(formatWithDay);
-		return formatter.format(date);
-	}
-
-	/**
-	 * 
-	 * @return the today's date
-	 */
-	public String getDateNow() {
-		Date date = Calendar.getInstance().getTime();
-		SimpleDateFormat formatter = new SimpleDateFormat(formatWithoutDay);
-		return formatter.format(date);
-	}
 
 	/**
 	 * generate unique links
@@ -168,7 +144,10 @@ public class MailService {
 		tabDate[0] = baseLink + "?uuidProj=" + uuid + "&uuid=" + uuMood + "&date=" + date + "&mood=" + MoodValue.REALLYBAD.getValue();
 		return tabDate;
 	}
-
+	/**
+	 * check if properties are ok else send illegalArgument
+	 * @return
+	 */
 	public boolean checkProperties() {
 		if (environment.getProperty("smtp.baseLink") != null && environment.getProperty("smtp.host") != null
 				&& environment.getProperty("smtp.port") != null && environment.getProperty("smtp.address") != null

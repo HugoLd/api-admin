@@ -40,18 +40,18 @@ public class MoodService {
 	 * @param moods
 	 * @return
 	 */
-	public List<List<Mood>> sortProjectMoods(List<Mood> moods) {
+	private List<List<Mood>> sortProjectMoods(List<Mood> moods) {
 		checkListOk(moods);
 		return browseList(moods);
 	}
 
 	/**
-	 * 
+	 * browse the list to return moods by day
 	 * @param moods
 	 * @return
 	 * @throws EmptyResultDataAccessException
 	 */
-	public List<List<Mood>> browseList(List<Mood> moods) {
+	private List<List<Mood>> browseList(List<Mood> moods) {
 		List<List<Mood>> listList = new ArrayList<List<Mood>>();
 		List<Mood> lm;
 		int numList;
@@ -75,7 +75,7 @@ public class MoodService {
 	 * @param date
 	 * @return
 	 */
-	public int searchDate(List<List<Mood>> listList, String date) {
+	private int searchDate(List<List<Mood>> listList, String date) {
 		for (int i = 0; i < listList.size(); i++) {
 			if (listList.get(i).get(0) != null) {
 				if (listList.get(i).get(0).getDate() != null) {
@@ -129,37 +129,55 @@ public class MoodService {
 	}
 
 	/**
-	 * check if the
+	 * check if the uuid seems can be a real uuid
 	 * 
 	 * @param mood
 	 * @return
 	 */
 	private boolean checkNoCheat(Mood mood) {
+		
 		Project proj = prim.get(mood.getUuidProj());
 		for (String mail : proj.getMails()) {
-			if (Util.generateUUID(mood.getUuid(), mail, mood.getDate()).equals(mood.getUuid())) {
+			if (Util.generateUUID(proj.getId(), mail, mood.getDate()).equals(mood.getUuid())) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	/**
-	 * check if the uuid already exist in the DB
-	 * 
-	 * @param uuid
+	 * remove all old moods ( >3 months)
+	 * @param uuidProj
+	 */
+	public void purgeProj(String uuidProj) {
+		List<Mood> listMood = mrim.getProjectMoods(uuidProj);
+		int dayNowCount= getTotalDayAmount(Util.getDateNow().split("-"));
+		for(Mood m : listMood){
+			System.out.println(m.getUuid());
+			if(m.getDate().split("-").length != 3 ){
+				mrim.delete(m.getUuid());
+			}
+			if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))>90){
+				mrim.delete(m.getUuid());
+			}
+			if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))<0){
+				mrim.delete(m.getUuid());
+			}			
+		}
+	}
+
+	
+	/**
+	 * get amount of days from a String[]
+	 * @param tabString
 	 * @return
 	 */
-	protected boolean checkUUIDMoodNotExisting(String uuid) {
-		Mood m = mrim.get(uuid);
-		if (m == null) {
-			return true;
+	private int getTotalDayAmount(String[] tabString){
+		int[] tabInt = new int[tabString.length];
+		for(int i = 0 ; i<tabString.length ; i++){
+			tabInt[i] = Integer.parseInt(tabString[i]);
 		}
-		return false;
+		return tabInt[0] + (tabInt[1]-1*30) + (tabInt[2]-1 * 365); 
 	}
-
-	public Mood updateMood(Mood mood) {
-		return mrim.update(mood);
-	}
-
+	
 }

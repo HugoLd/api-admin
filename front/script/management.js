@@ -2,7 +2,7 @@
  * set heads with url params
  */
 (function() {
-	var uuid = window.location.search.substring(1).split("&")[0].substring(5);
+	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	if (uuid.length < 10) {
 		alert("Bad project ID , please check url");
 	} else {
@@ -19,7 +19,7 @@
  * global method for adding moods count
  */
 (function() {
-	var uuid = window.location.search.substring(1).split("&")[0].substring(5);
+	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
@@ -31,7 +31,7 @@
  * global method for adding table
  */
 (function() {
-	var uuid = window.location.search.substring(1).split("&")[0].substring(5);
+	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
@@ -141,7 +141,7 @@ function createImg(data,index){
  * global method for adding moods count
  */
 (function() {
-	var uuid = window.location.search.substring(1).split("&")[0].substring(5);
+	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
@@ -196,7 +196,6 @@ function makeStats(data){
 		total += values[v];
 		avg += (values[v]*v);
 	}
-	console.log(listCom);
 	avg = avg/total;
 	createDivBefore("Average mood : "+Math.trunc(avg),Math.trunc(avg));
 	useC3(values,Math.round(avg * 100) / 100);
@@ -273,6 +272,11 @@ $('#statsBtn').click( function () {
 	document.getElementById("count").style.display = "none";
 	document.getElementById("stats").style.display = "inline-block";
 	document.getElementById("graphs").style.display = "inline-block";
+});
+$('#mailBtn').click( function () {
+	$.post("http://localhost:8080/api-admin/projects/"+window.location.search.substring(1).split("&")[0].substring(9)+"/sendMail").done(function(){
+		alert("Sent");
+	});
 });
 
 

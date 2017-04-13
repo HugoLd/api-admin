@@ -39,16 +39,8 @@ public class MailServiceTest extends TestCase {
 		super.tearDown();
 	}
 	
-	@Test
-	public void testGetDateNowWithDayOfWeek_shouldContainsSlash_whenCall(){
-		assertEquals(mailService.getDateNowWithDayOfWeek().contains("/"),true);
-	}
 
-	@Test
-	public void testGetDateNow_shouldContainsMinus_whenCall(){
-		System.out.println(mailService.getDateNow());
-		assertEquals(mailService.getDateNow().contains("-"),true);
-	}
+	
 	@Test
 	public void testGenerateLinks_souldContainsStrings_WhenParamsOk(){
 		when(env.getProperty("smtp.baseLink")).thenReturn("google.fr");
@@ -77,44 +69,4 @@ public class MailServiceTest extends TestCase {
 		verify(env).getProperty("smtp.address");
 		verify(env).getProperty("smtp.password");
 	}
-	@Test
-	public void testGetAddress_souldContainsAt_WhenCalled(){
-		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
-		assertTrue(mailService.getAddress().contains("@"));
-		verify(env).getProperty("smtp.address");
-	}
-	@Test
-	public void testInitMailSender_souldCallPwdAndAdr_WhenAuthTrue(){
-		when(env.getProperty("smtp.host")).thenReturn("host");
-		when(env.getProperty("smtp.port")).thenReturn("587");
-		when(env.getProperty("smtp.auth")).thenReturn("true");
-		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
-		when(env.getProperty("smtp.password")).thenReturn("123");		
-		assertTrue(mailService.initMailSender() != null);
-		verify(env).getProperty("smtp.host");
-		verify(env).getProperty("smtp.port");
-		verify(env,times(2)).getProperty("smtp.auth");
-		verify(env).getProperty("smtp.address");
-		verify(env).getProperty("smtp.password");
-	}
-	@Test
-	public void testInitMailSender_souldNotBeNull_WhenCalled(){
-		when(env.getProperty("smtp.host")).thenReturn("host");
-		when(env.getProperty("smtp.port")).thenReturn("587");
-		when(env.getProperty("smtp.auth")).thenReturn("false");
-		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
-		when(env.getProperty("smtp.password")).thenReturn("123");		
-		assertTrue(mailService.initMailSender() != null);
-		verify(env).getProperty("smtp.host");
-		verify(env).getProperty("smtp.port");
-		verify(env,times(2)).getProperty("smtp.auth");
-		verify(env,never()).getProperty("smtp.address");
-		verify(env,never()).getProperty("smtp.password");
-	}
-	
-	
-	
-	
-	
-
 }

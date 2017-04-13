@@ -61,14 +61,6 @@ public class MoodServiceTest {
 		assertEquals(moodServ.getProjectMoods(AN_UUID).get(0).getClass(), ArrayList.class);		
 		verify(mrim,times(2)).getProjectMoods(AN_UUID);
 	}
-	@Test(expected = IllegalArgumentException.class)
-	public void testSortListMood_shouldBeIAException_WhenNull(){
-		moodServ.sortProjectMoods(null);
-	}
-	@Test
-	public void testSortListMood_shouldBeAListOfList_WhenOk(){
-		assertEquals(moodServ.sortProjectMoods(A_LIST).getClass(),ArrayList.class);
-	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveMood_shouldBeIAException_WhenMailNotIn(){
@@ -80,24 +72,6 @@ public class MoodServiceTest {
 		moodServ.saveMood(m);
 		verify(prim).get("12345-6789-AZUSI");
 	}
-	
-	@Test
-	public void testCheckUUIDMoodNotExisting_shouldBeTrue_WhenMoodNotExist(){
-		when(mrim.get("12345-6789-AZUSI")).thenReturn(null);		
-		assertEquals(moodServ.checkUUIDMoodNotExisting("12345-6789-AZUSI"),true);
-		verify(mrim).get("12345-6789-AZUSI");
-	}
-	@Test
-	public void testCheckUUIDMoodNotExisting_shouldBeFalse_WhenMoodExist(){
-		when(mrim.get("12345-6789-AZUSI")).thenReturn(A_MOOD);		
-		assertEquals(moodServ.checkUUIDMoodNotExisting("12345-6789-AZUSI"),false);
-		verify(mrim).get("12345-6789-AZUSI");
-	}
-	@Test
-	public void testUpdateMood_shouldBeAMood_WhenUpdated(){
-		when(mrim.update(A_MOOD)).thenReturn(A_MOOD);	
-		assertEquals(moodServ.updateMood(A_MOOD).getClass(),Mood.class);
-		when(mrim.update(A_MOOD)).thenReturn(A_MOOD);	
-	}
+
 
 }
