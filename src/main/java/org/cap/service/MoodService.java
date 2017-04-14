@@ -153,16 +153,15 @@ public class MoodService {
 		List<Mood> listMood = mrim.getProjectMoods(uuidProj);
 		int dayNowCount= getTotalDayAmount(Util.getDateNow().split("-"));
 		for(Mood m : listMood){
-			System.out.println(m.getUuid());
 			if(m.getDate().split("-").length != 3 ){
 				mrim.delete(m.getUuid());
 			}
-			if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))>90){
+			else if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))>90){
 				mrim.delete(m.getUuid());
 			}
-			if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))<0){
+			else if((dayNowCount - getTotalDayAmount(m.getDate().split("-")))<0){
 				mrim.delete(m.getUuid());
-			}			
+			}
 		}
 	}
 

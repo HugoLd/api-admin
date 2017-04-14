@@ -211,7 +211,9 @@ function createDivBefore(value ,index){
 	document.getElementById("stats").insertBefore(clone,document.getElementById("stats").firstChild);
 }
 
-
+/*
+ * draw donut graph with C3 js
+ */
 function useC3(values,avg){
 	var chart = c3.generate({
 		bindto:'#graphs',	
@@ -246,7 +248,9 @@ function useC3(values,avg){
 	    }
 	});
 }
-
+/*
+ * initialize the table with comments data
+ */
 function initCommentTable(data){
 	var table =  $('#tabComments').DataTable({
 		"data" : data,

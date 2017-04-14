@@ -61,6 +61,14 @@ public class MoodServiceTest {
 		assertEquals(moodServ.getProjectMoods(AN_UUID).get(0).getClass(), ArrayList.class);		
 		verify(mrim,times(2)).getProjectMoods(AN_UUID);
 	}
+	@Test
+	public void testSaveMood_shouldNotBeException_whenMoodOk() {
+		A_MOOD.setDate(Util.getDateNow());
+		A_MOOD.setUuid(Util.generateUUID(A_PROJECT.getId(), "hello@gmail.com", Util.getDateNow()));		
+		when(prim.get(A_PROJECT.getId())).thenReturn(A_PROJECT);		
+		moodServ.saveMood(A_MOOD);
+		verify(prim).get(A_PROJECT.getId());
+	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveMood_shouldBeIAException_WhenMailNotIn(){
@@ -71,6 +79,20 @@ public class MoodServiceTest {
 		when(prim.get("12345-6789-AZUSI")).thenReturn(A_PROJECT);		
 		moodServ.saveMood(m);
 		verify(prim).get("12345-6789-AZUSI");
+	}
+	@Test
+	public void testPurgeProj_shouldNotBeException_whenEvtgOk() {
+		List<Mood> list = new ArrayList<Mood>();
+		list.add(new Mood("12345-6789-AZUSI",A_PROJECT.getId(),0," e","1-2"));
+		list.add(new Mood("1345-6789-AZUSI",A_PROJECT.getId(),1,"e ","25-12-2018"));
+		list.add(new Mood("12345-689-AZUSI",A_PROJECT.getId(),2,"f ","01-01-1001"));
+		list.add(new Mood("12345-6789-ZUSI",A_PROJECT.getId(),3," f",Util.getDateNow()));
+		
+		A_MOOD.setDate(Util.getDateNow());
+		A_MOOD.setUuid(Util.generateUUID(A_PROJECT.getId(), "hello@gmail.com", Util.getDateNow()));		
+		when(mrim.getProjectMoods(A_PROJECT.getId())).thenReturn(list);		
+		moodServ.purgeProj(A_PROJECT.getId());
+		verify(mrim).getProjectMoods(A_PROJECT.getId());
 	}
 
 
