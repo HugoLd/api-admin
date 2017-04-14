@@ -226,7 +226,7 @@ $('#purgeProj').click( function () {
  * listener for getting data on a project
  */
 $('#seeStats').click( function () {			
-	window.location.replace("/bamby/management.html?uuidProj="+document.getElementById("ProjectId").getAttribute("value"))
+	window.location.replace("/bamby/management.html?uuidProj="+document.getElementById("ProjectId").getAttribute("value"));
 } );
 /*
  * (re)initialise mail table components to be filled by datatables
@@ -234,5 +234,13 @@ $('#seeStats').click( function () {
 function initTableMail(){	
 	$('#listMails').html($('#templateMail').html());
 }
+/*
+ * send the mail to project's members
+ */
+$('#mailBtn').click( function () {
+	$.post("/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/sendMail").done(function(){
+		alert("Sent");
+	});
+});
 
 

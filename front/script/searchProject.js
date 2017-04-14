@@ -4,7 +4,9 @@
 $(document).ready(function() {
 	$.get("/api-admin/projects").done(function(data) {
 		initDataTableProject(data);
-	});
+	}).fail(function(xhr, status, error){
+		alert("Error , \n status code ="+status+"\n Error "+xhr+" message : \n"+error);
+	});	;
 });
 
 

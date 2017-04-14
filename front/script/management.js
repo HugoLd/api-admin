@@ -33,19 +33,18 @@
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
 	var url = "/api-admin/projects/" + uuid + "/moods";
-	$.get(url).done(function(data) {
-		if (data.length != 0) {			
+	$.get(url).done(function(data) {	
 			createTable();
 			addHeads();		
 			eachDaysMoods(data);
-			
-		} else {
-			var noMoods = document.createElement("p");
-			noMoods.appendChild(document.createTextNode("No moods found"));
-			document.getElementById("moods").appendChild(noMoods);
-		}
 
-	});
+	}).fail(function(xhr, status, error){
+		var noMoods = document.createElement("p");
+		noMoods.appendChild(document.createTextNode("No moods found"));
+		document.getElementById("moods").appendChild(noMoods);
+		alert("Error , \n status code ="+status+"\n Error "+xhr+" message : \n"+error);		
+	});	
+		
 })();
 
 
@@ -267,16 +266,20 @@ $('#moodsBtn').click( function () {
 	document.getElementById("moods").style.display = "inline-block";
 	document.getElementById("count").style.display = "inline-block";
 });
+/*
+ * show stats page
+ */
 $('#statsBtn').click( function () {
 	document.getElementById("moods").style.display = "none";
 	document.getElementById("count").style.display = "none";
 	document.getElementById("stats").style.display = "inline-block";
 	document.getElementById("graphs").style.display = "inline-block";
 });
-$('#mailBtn').click( function () {
-	$.post("/api-admin/projects/"+window.location.search.substring(1).split("&")[0].substring(9)+"/sendMail").done(function(){
-		alert("Sent");
-	});
+/*
+ * go to the project searching page
+ */
+$('#searchBtn').click( function () {
+	window.location.replace("/bamby/searchProject.html");
 });
 
 

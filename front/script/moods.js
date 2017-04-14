@@ -43,7 +43,8 @@ $('#moodSelector').submit(function (event) {
 		contentType: "application/json",
 		dataType: 'json'
 	}).done(function(){
-		alert("Thanks for voting =) \n Please come back soon !")
+		window.location.replace("/bamby/management.html?uuidProj="+projectUUID);
+		alert("Thanks for voting =) \n Please come back soon !");		
 	}).fail(function(xhr, status, error){
 		alert("Error , \n status code ="+status+"\n Error message : \n"+error);
 	});

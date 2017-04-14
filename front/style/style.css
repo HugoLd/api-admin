@@ -25,7 +25,16 @@
 	margin:10px;
 	color:white;
 	padding:4px;
-	width:30%;
+	width:25%;
+	
+}
+.form-comment #searchBtn{
+	background : #22B14C;
+	margin:10px;
+	color:white;
+	float:left;
+	padding:4px;
+	width:6%;
 	
 }
 .form-comment #stats tbody tr :nth-child(2){
@@ -309,11 +318,20 @@ td img{
 	border-bottom: 2px solid #C91C24;	
 	color: #fff;
 }
+.table input[type="button"]+#deleteMail {
+	float:right;	
+	background: #ED1C24;
+	border-bottom: 2px solid #C91C24;	
+	color: #fff;
+}
 .table input[type="button"]+#purgeProj {
 	float:right;	
 	background: #FF7F27;
 	border-bottom: 2px solid #FF5F27;	
 	color: #fff;
+}
+.table input[type="button"]+#mailBtn {
+	float:right;
 }
 .form-comment input[type="submit"]:hover {
 	background: #0187CD;
