@@ -6,7 +6,7 @@
 	if (uuid.length < 10) {
 		alert("Bad project ID , please check url");
 	} else {
-		var url = "http://localhost:8080/api-admin/projects/" + uuid;
+		var url = "/api-admin/projects/" + uuid;
 		$.get(url).done(
 				function(data) {
 					document.getElementById("title").appendChild(document.createTextNode("Manage moods for " +data.title));
@@ -20,7 +20,7 @@
  */
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
-	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
+	var url = "/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
 			makeStats(data);			
@@ -32,7 +32,7 @@
  */
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
-	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
+	var url = "/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
 			createTable();
@@ -142,7 +142,7 @@ function createImg(data,index){
  */
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
-	var url = "http://localhost:8080/api-admin/projects/" + uuid + "/moods";
+	var url = "/api-admin/projects/" + uuid + "/moods";
 	$.get(url).done(function(data) {
 		if (data.length != 0) {			
 			eachDaysCount(data);			
@@ -274,7 +274,7 @@ $('#statsBtn').click( function () {
 	document.getElementById("graphs").style.display = "inline-block";
 });
 $('#mailBtn').click( function () {
-	$.post("http://localhost:8080/api-admin/projects/"+window.location.search.substring(1).split("&")[0].substring(9)+"/sendMail").done(function(){
+	$.post("/api-admin/projects/"+window.location.search.substring(1).split("&")[0].substring(9)+"/sendMail").done(function(){
 		alert("Sent");
 	});
 });

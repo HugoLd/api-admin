@@ -11,31 +11,56 @@
 <body>
 	<div class="form-comment">
 		<h1 id="title">Manage projects</h1>
-		<div id=content>
+		<div id="content">
 			<div id="proj">
 				<form class="table">
 					<input type="text" id="textInputProj" placeholder="ProjectName" />
-					<input type="button" id="btnInputProj" value="Add" />					
-					<input	type="button" id="deleteProj" value="Delete selected project" />
+					<input type="button" id="btnInputProj" value="Add" /> 
+					<input type="button" id="deleteProj" value="Delete selected project" />
+					<input	type="button" id="seeStats" value="See selected project stats" />
 					<input type="button" id="purgeProj" value="Purge selected project" />
 				</form>
 				<table id="projects" class="display">
-					
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>title</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>id</th>
+							<th>title</th>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 			<div id="mails">
-				<form class = "table">
-					<input type="text" id="textInputMail" placeholder="name@company.com" />
-					<input type="button" id="btnInputMail" value="Add" />
-					<input type="button" id="deleteMail" value="Delete selected E-Mail" />
+				<form class="table">
+					<input type="text" id="textInputMail"
+						placeholder="name@company.com" /> <input type="button"
+						id="btnInputMail" value="Add" /> <input type="button"
+						id="deleteMail" value="Delete selected E-Mail" />
 				</form>
-				<table id="listMails" class="display">					
+				<table id="listMails" class="display">
 				</table>
 			</div>
 		</div>
-		<input type="text" id="ProjectId" hidden="true" />
-		<input type="text" id="SelectedMail" hidden="true" />
+		<input type="text" id="ProjectId" hidden="true" /> <input type="text"
+			id="SelectedMail" hidden="true" />
 		<script type='text/javascript' src="script/admin.js"></script>
 	</div>
+	<table id="templateMail" style="display:none;">
+		<thead>
+			<tr>
+				<th>mail</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>mail</th>
+			</tr>
+		</tfoot>
+	</table>
 </body>
 </html>

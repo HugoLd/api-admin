@@ -2,8 +2,7 @@
  * when document is ready init table project
  */
 $(document).ready(function() {
-	$.get("http://localhost:8080/api-admin/projects").done(function(data) {
-		initTableProject();
+	$.get("/api-admin/projects").done(function(data) {
 		initDataTableProject(data);
 	});
 });
@@ -49,7 +48,7 @@ function setOnClickListenerProject(table){
  * init table mail 
  */
 function initMails(id) {
-	$.get("http://localhost:8080/api-admin/projects/" + id).done(function(data) {		
+	$.get("/api-admin/projects/" + id).done(function(data) {		
 		var newData = addDataMail(data);
 		initDataTableMail(newData);
 		});
@@ -124,7 +123,7 @@ $('#btnInputMail').on('click',function() {
 				"email" : value
 		}
 		$.ajax({
-			url: "http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/emails",
+			url: "/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/emails",
 			type: "POST",
 			data: JSON.stringify(value),
 			contentType: "application/json",
@@ -149,8 +148,8 @@ $('#deleteMail').click( function () {
 		}		
 		
 		$.ajax({
-			url: "http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/deleteUser",
-			type: "POST",
+			url: "/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/user",
+			type: "DELETE",
 			data: JSON.stringify(value),
 			contentType: "application/json"}).done(function() {
 				$('#listMails').DataTable().row('.selected').remove().draw( true );
@@ -171,7 +170,7 @@ $('#btnInputProj').on('click',function() {
 				"title" : value
 		}
 		$.ajax({
-			url: "http://localhost:8080/api-admin/projects",
+			url: "/api-admin/projects",
 			type: "POST",
 			data: JSON.stringify(value),
 			contentType: "application/json",
@@ -179,6 +178,8 @@ $('#btnInputProj').on('click',function() {
 		}).done(function(data) {
 			$('#projects').DataTable().row.add(data).draw(true);
 			document.getElementById('textInputMail').value = "";
+		}).fail(function(xhr, status, error){
+			alert("Error , \n status code ="+status+"\n Error message : \n"+error);
 		});		
 	}
 	else{
@@ -192,11 +193,17 @@ $('#btnInputProj').on('click',function() {
  */
 $('#deleteProj').click( function () {
 	if(confirm("Are you sure?")){		
-		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/delete").done(function(){
+		console.log("i'msure");
+		
+		$.ajax({
+			url: "/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value"),
+			type: "DELETE",
+			contentType: "application/json"
+		}).done(function(){
 			$('#projects').DataTable().row('.selected').remove().draw( true );
-		}).fail(function(){
-			console.log("Delete failed");
-		});
+		}).fail(function(xhr, status, error){
+			alert("Error , \n status code ="+status+"\n Error message : \n"+error);
+		});	
 		
 	}
 } );
@@ -206,57 +213,26 @@ $('#deleteProj').click( function () {
  */
 $('#purgeProj').click( function () {
 	if(confirm("Do you really want to purge this project?")){		
-		$.post("http://localhost:8080/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/purge").done(function(){
+		$.post("/api-admin/projects/"+document.getElementById("ProjectId").getAttribute("value")+"/purge").done(function(){
 			alert("Purge success");
-		}).fail(function(){
-			alert("Purge failed");
+		}).fail(function(xhr, status, error){
+			alert("Error , \n status code ="+status+"\n Error message : \n"+error);
 		});
 		
 	}
 } );
 
 /*
+ * listener for getting data on a project
+ */
+$('#seeStats').click( function () {			
+	window.location.replace("/bamby/management.html?uuidProj="+document.getElementById("ProjectId").getAttribute("value"))
+} );
+/*
  * (re)initialise mail table components to be filled by datatables
  */
 function initTableMail(){	
-	var thead = document.createElement("thead");
-	var tfoot = document.createElement("tfoot");
-	var trhead = document.createElement("tr");
-	var trfoot = document.createElement("tr");
-	var thhead = document.createElement("th");
-	var thfoot = document.createElement("th");
-	thhead.appendChild(document.createTextNode("mail"));
-	thfoot.appendChild(document.createTextNode("mail"));
-	trhead.appendChild(thhead);
-	trfoot.appendChild(thfoot);
-	thead.appendChild(trhead);
-	tfoot.appendChild(trfoot);
-	document.getElementById("listMails").appendChild(thead);
-	document.getElementById("listMails").appendChild(tfoot);
+	$('#listMails').html($('#templateMail').html());
 }
 
-/*
- * initialise project table components to be filled by datatables
- */
-function initTableProject(){	
-	var thead = document.createElement("thead");
-	var trhead = document.createElement("tr");
-	var th1head = document.createElement("th");
-	var th2head = document.createElement("th");
-	var tfoot = document.createElement("tfoot");
-	var trfoot = document.createElement("tr");
-	var th1foot = document.createElement("th");
-	var th2foot = document.createElement("th");
-	th1foot.appendChild(document.createTextNode("id"));
-	th2foot.appendChild(document.createTextNode("title"));
-	th1head.appendChild(document.createTextNode("id"));
-	th2head.appendChild(document.createTextNode("title"));	
-	trhead.appendChild(th1head);
-	trhead.appendChild(th2head);
-	trfoot.appendChild(th1foot);
-	trfoot.appendChild(th2foot);
-	thead.appendChild(trhead);
-	tfoot.appendChild(trfoot);
-	document.getElementById("projects").appendChild(thead);
-	document.getElementById("projects").appendChild(tfoot);
-}
+

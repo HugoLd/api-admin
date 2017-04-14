@@ -297,14 +297,19 @@ td img{
 	border-left-style: none;
 	color: #fff;
 }
-
-.table input[type="button"]:nth-child(3) {
+.table input[type="button"]+#seeStats {
+	float:right;	
+	background: #22B14C;
+	border-bottom: 2px solid #22814C;	
+	color: #fff;
+}
+.table input[type="button"]+#deleteProj {
 	float:right;	
 	background: #ED1C24;
 	border-bottom: 2px solid #C91C24;	
 	color: #fff;
 }
-.table input[type="button"]:nth-child(4) {
+.table input[type="button"]+#purgeProj {
 	float:right;	
 	background: #FF7F27;
 	border-bottom: 2px solid #FF5F27;	

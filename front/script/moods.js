@@ -11,7 +11,7 @@
  */
 (function() {
 	var uuid = window.location.search.substring(1).split("&")[0].substring(9);
-	var url = "http://localhost:8080/api-admin/projects/" + uuid;
+	var url = "/api-admin/projects/" + uuid;
 	$.get(url).done(function(data) {
 		document.getElementById("title").appendChild(document.createTextNode(data.title));
 
@@ -26,7 +26,7 @@ $('#moodSelector').submit(function (event) {
 
 	var args = window.location.search.substring(1).split("&");
 	var projectUUID = args[0].substring(9);
-	var url = "http://localhost:8080/api-admin/projects/"+projectUUID+"/moods";
+	var url = "/api-admin/projects/"+projectUUID+"/moods";
 	var moodUUID = args[1].substring(5);
 	var moodDate = args[2].substring(5);
 	var data = {

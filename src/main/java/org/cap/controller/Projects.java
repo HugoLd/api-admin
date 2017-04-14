@@ -163,9 +163,10 @@ public class Projects {
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuidProj}/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/projects/{uuidProj}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteProject(@PathVariable("uuidProj") String uuidProj) {	
+		System.out.println("############# "+uuidProj+"################");
 		pServ.deleteProj(uuidProj);
 	}
 	
@@ -188,7 +189,7 @@ public class Projects {
 	 * @param json
 	 * @throws EmptyResultDataAccessException
 	 */
-	@RequestMapping(value = "/projects/{uuidProj}/deleteUser", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/projects/{uuidProj}/user", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public void deleteUser(@PathVariable("uuidProj") String uuidProj, @RequestBody AddUserToProjectInput user) {
 		pServ.deleteUser(user.getEmail() ,uuidProj);
