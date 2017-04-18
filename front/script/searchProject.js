@@ -35,7 +35,7 @@ function initDataTableProject(data){
  */
 function setOnClickListenerProject(table){
 	$('#projectList tbody').on('click', 'tr', function() {
-		window.location.replace("/bamby/management.html?uuidProj="+($(this).children("td")[0].childNodes[0].nodeValue));			
+		window.location.replace("/bamby/stats.html?uuidProj="+($(this).children("td")[0].childNodes[0].nodeValue));			
 		
 });
 }

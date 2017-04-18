@@ -226,7 +226,7 @@ $('#purgeProj').click( function () {
  * listener for getting data on a project
  */
 $('#seeStats').click( function () {			
-	window.location.replace("/bamby/management.html?uuidProj="+document.getElementById("ProjectId").getAttribute("value"));
+	window.location.replace("/bamby/stats.html?uuidProj="+document.getElementById("ProjectId").getAttribute("value"));
 } );
 /*
  * (re)initialise mail table components to be filled by datatables
