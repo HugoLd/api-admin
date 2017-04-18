@@ -30,7 +30,7 @@ Client :
 ________________________________________________________________________________________________________________________________
 ________________________________________________________________________________________________________________________________
 
-Descriptif partie java :
+Descriptif partie serveur :
 
 Partie Java -> src  
 ________________________________________________________________________________________________________________________________
@@ -83,17 +83,40 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________________
   -Ressources
   
-     -Properties
+     -Properties    
      
-     	-> mail.properties > permet de configurer les préferences d'envoi de mail
-	
-	-> mongoConfig.properties > permet de configurer les préferences d'accès à la base mongoDB
-	
-     -mailTemplate
+     	-> mail.properties > permet de configurer les préferences d'envoi de mail						     -   	 -> mongoConfig.properties > permet de configurer les préferences d'accès à la base mongoDB	
+    
+    -mailTemplate    
      
      	->mailTemplate > configuration du contenu de l'e-mail envoyé
 
 ________________________________________________________________________________________________________________________________
 ________________________________________________________________________________________________________________________________
+Descriptif de la partie client
 
 Partie JavaScript -> front
+
+________________________________________________________________________________________________________________________________
+
+  - Partie Admin
+  
+  	-> admin.js -> contient les traitements coté client concernant la page d'administration des projets
+	
+  - Partie Mood
+  
+  	-> moods.js -> contient les traitements côte client concernant la page de vote des humeurs
+
+  - Partie Stats
+	
+	-> stats.js -> contient les traitements côté client concernant la page d'affichage des statistiques
+	
+  - Partie Recherche
+  
+  	-> searchProject.js -> contient les traitements côté client concernant la page de recherche d'un projet
+	
+	
+_______________________________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________________________
+
+Application développée par Capgemini Service SAS . Tous droits réservés.
