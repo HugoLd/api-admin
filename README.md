@@ -2,7 +2,9 @@
 
 Descriptif du projet :
 
-Le projet BAMBY sert à gérer les humeurs d'une équipe projet , à la manière de TEAM MOOD , il permet après configuration de créer des projets , d'y affecter des participants , et de gérer les envois de mails réguliers permettant de connaitre leurs humeurs.
+Le projet BAMBY sert à gérer les humeurs d'une équipe projet .
+
+A la manière de TEAM MOOD  il permet ,après configuration, de créer des projets , d'y affecter des participants , et de gérer les envois de mails réguliers permettant de connaitre leurs humeurs.
 
 La partie affichage permet à l'utilisateur de noter son humeur et de la commenter , ainsi que de consulter les statistiques et de gérer les projets , la partie API permet le traitement et la gestion de la persistence des données.
 
@@ -57,26 +59,38 @@ ________________________________________________________________________________
 	  
 ________________________________________________________________________________________________________________________________  
   -Package org.cap.repo
+  
       -> interface Repo > interface globale des classes de persistences , contient les opérations simples de persistence
+      
       -> classe MoodRepoImplMongo > classe de persistence en base mongodb concernant les objets Mood , implémente Repo
+      
       -> classe ProjectrepoImplMongo > classe de persistence en base mongodb concernant les objets Project , implémente Repo
       
 ________________________________________________________________________________________________________________________________
   -Package org.cap.service
+  
       -> classe MailService > classe permettant le traitement des actions de mailing
+      
       -> classe MoodService > classe permettant le traitement des actions concernant les humeurs
+      
       -> classe projectService > classe permettant le traitement des actions concernant les projets
       
 ________________________________________________________________________________________________________________________________
   -Package org.cap.utils
+  
       -> classe Util > classe utilitaire permettant des actions récurrentes dans différentes classes ( date , uuid ..) 
       
 ________________________________________________________________________________________________________________________________
   -Ressources
+  
      -Properties
+     
      	-> mail.properties > permet de configurer les préferences d'envoi de mail
+	
 	-> mongoConfig.properties > permet de configurer les préferences d'accès à la base mongoDB
+	
      -mailTemplate
+     
      	->mailTemplate > configuration du contenu de l'e-mail envoyé
 
 ________________________________________________________________________________________________________________________________
