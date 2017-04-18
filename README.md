@@ -20,6 +20,7 @@ Server :
 - Java
 - Spring ( Mail , Data , MVC ...)
 - Maven
+- FreeMarker (mail Template)
 
 Client :
 - Javascript
@@ -99,19 +100,19 @@ Partie JavaScript -> front
 
 ________________________________________________________________________________________________________________________________
 
-  - Partie Admin
+  -Partie Admin   
   
   	-> admin.js -> contient les traitements coté client concernant la page d'administration des projets
-	
-  - Partie Mood
+		
+  -Partie Mood
   
   	-> moods.js -> contient les traitements côte client concernant la page de vote des humeurs
-
-  - Partie Stats
 	
-	-> stats.js -> contient les traitements côté client concernant la page d'affichage des statistiques
-	
-  - Partie Recherche
+  -Partie Stats
+  
+  	-> stats.js -> contient les traitements côté client concernant la page d'affichage des statistiques
+		
+  -Partie Recherche
   
   	-> searchProject.js -> contient les traitements côté client concernant la page de recherche d'un projet
 	
