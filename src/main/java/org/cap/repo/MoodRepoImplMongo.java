@@ -18,15 +18,15 @@ import com.mongodb.MongoClient;
 @Configuration
 @PropertySource("classpath:/mongoConfig.properties")
 public class MoodRepoImplMongo implements Repo<Mood> {
-	private MongoTemplate mongoTemplate;
+	MongoTemplate mongoTemplate;
 	@Autowired
-	private Environment environment; // getting environment for properties
+	Environment environment; // getting environment for properties
 
 	/**
 	 * init the Template after constructor getting infos in properties file
 	 */
 	@PostConstruct
-	private void init() {
+	protected void init() {
 		checkProperties();
 		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
 				Integer.parseInt(environment.getProperty("mongo.port")));
@@ -68,6 +68,18 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 		return mongoTemplate.find(q, Mood.class);
 	}
 
+	
+	/**
+	 * get a mood by id
+	 */
+	@Override
+	public Mood get(String id) {
+		if (id == null) {
+			throw new IllegalArgumentException("UUID null");
+		}
+		return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(id)), Mood.class);
+
+	}
 	/**
 	 * save a mood
 	 */
@@ -78,17 +90,6 @@ public class MoodRepoImplMongo implements Repo<Mood> {
 		} else {
 			mongoTemplate.insert(object);
 		}
-
-	}
-	/**
-	 * get a mood by id
-	 */
-	@Override
-	public Mood get(String id) {
-		if (id == null) {
-			throw new IllegalArgumentException("UUID null");
-		}
-		return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(id)), Mood.class);
 
 	}
 	/**

@@ -41,8 +41,7 @@
 	}).fail(function(xhr, status, error){
 		var noMoods = document.createElement("p");
 		noMoods.appendChild(document.createTextNode("No moods found"));
-		document.getElementById("moods").appendChild(noMoods);
-		alert("Error , \n status code ="+status+"\n Error "+xhr+" message : \n"+error);		
+		document.getElementById("moods").appendChild(noMoods);		
 	});	
 		
 })();

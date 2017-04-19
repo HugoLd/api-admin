@@ -36,7 +36,6 @@ public class MailService {
 	JavaMailSender mailSender;
 	@Autowired
 	Configuration freemarkerConfiguration;
-	Util util;
 	private final String MAIL_TEMPLATE = "mailTemplate.ftl";
 
 	/**
@@ -97,7 +96,7 @@ public class MailService {
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	private JavaMailSender initMailSender() {
+	protected JavaMailSender initMailSender() {
 		JavaMailSenderImpl jms = new JavaMailSenderImpl();
 		jms.setHost(environment.getProperty("smtp.host"));
 		jms.setPort(Integer.parseInt(environment.getProperty("smtp.port")));		

@@ -1,10 +1,8 @@
 package org.cap.service;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import junit.framework.TestCase;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -69,4 +67,33 @@ public class MailServiceTest extends TestCase {
 		verify(env).getProperty("smtp.address");
 		verify(env).getProperty("smtp.password");
 	}
+	@Test
+	public void testInitMailSender_shouldUsrBeSet_WhenAuthTrue(){
+		when(env.getProperty("smtp.host")).thenReturn("host");
+		when(env.getProperty("smtp.port")).thenReturn("587");
+		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
+		when(env.getProperty("smtp.password")).thenReturn("123");		
+		when(env.getProperty("smtp.auth")).thenReturn("true");	
+		JavaMailSenderImpl jms = (JavaMailSenderImpl) mailService.initMailSender();
+		assertFalse(jms.getUsername() == null);
+		verify(env, atLeast(1)).getProperty("smtp.host");
+		verify(env, atLeast(1)).getProperty("smtp.port");
+		verify(env, atLeast(1)).getProperty("smtp.auth");
+		verify(env, atLeast(1)).getProperty("smtp.address");
+		verify(env, atLeast(1)).getProperty("smtp.password");
+	}
+	@Test
+	public void testInitMailSender_shouldUsrNotBeSet_WhenAuthFalse(){
+		when(env.getProperty("smtp.host")).thenReturn("host");
+		when(env.getProperty("smtp.port")).thenReturn("587");
+		when(env.getProperty("smtp.address")).thenReturn("hello@mail.fr");
+		when(env.getProperty("smtp.password")).thenReturn("123");		
+		when(env.getProperty("smtp.auth")).thenReturn("false");	
+		JavaMailSenderImpl jms = (JavaMailSenderImpl) mailService.initMailSender();
+		assertTrue(jms.getUsername() == null);
+		verify(env, atLeast(1)).getProperty("smtp.host");
+		verify(env, atLeast(1)).getProperty("smtp.port");
+		verify(env, atLeast(1)).getProperty("smtp.auth");
+	}
+	
 }

@@ -39,7 +39,7 @@ public class ProjectRepoImplMongo implements Repo<Project> {
 	 * init the Template after constructor getting infos in properties file
 	 */
 	@PostConstruct
-	private void init() {
+	protected void init() {
 		checkProperties();
 		MongoClient mongo = new MongoClient(environment.getProperty("mongo.host"),
 				Integer.parseInt(environment.getProperty("mongo.port")));
